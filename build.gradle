@@ -1,0 +1,54 @@
+
+apply plugin: 'groovy'
+
+group 'cz.hartrik.pia'
+version '1.0.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile "org.codehaus.groovy:groovy:2.5.2"
+
+    compile "org.eclipse.jetty:jetty-webapp:9.0.6.v20130930"
+
+  	compile "org.springframework:spring-web:4.1.6.RELEASE"
+  	compile "org.springframework:spring-context:4.1.6.RELEASE"
+  	compile "org.springframework:spring-context-support:4.1.6.RELEASE"
+  	compile "org.springframework:spring-webmvc:4.1.6.RELEASE"
+  	compile "org.springframework:spring-jdbc:4.1.6.RELEASE"
+
+  	compile "org.postgresql:postgresql:9.4-1201-jdbc4"
+  	compile "com.heroku.sdk:heroku-jdbc:0.1.1"
+  	compile "org.freemarker:freemarker:2.3.23"
+  	compile "com.fasterxml.jackson.core:jackson-databind:2.8.6"
+  	compile "log4j:log4j:1.2.16"
+
+  	testCompile "junit:junit:4.12"
+  	testCompile "org.springframework:spring-test:4.1.6.RELEASE"
+  	testCompile "com.jayway.jsonpath:json-path:0.8.1"
+}
+
+test {
+    testLogging {
+        events "failed"
+        exceptionFormat "full"
+    }
+}
+
+// artifacts
+
+jar {
+    manifest {
+        attributes(
+                'Implementation-Title': 'pia',
+                'Implementation-Version': version,
+                'Implementation-Vendor': 'Patrik Harag',
+                'Main-Class': 'cz.hartrik.pia.Main',
+        )
+    }
+    doFirst {
+        from { configurations.runtime.collect { it.isDirectory() ? it : zipTree(it) } }
+    }
+}

@@ -1,0 +1,34 @@
+
+/* TEMPLATE */
+
+footer p {
+    padding-top: 12px;
+    color: gray;
+    font-size: small;
+}
+
+
+/* ERROR */
+
+.error-output {
+    font-family: monospace;
+    white-space: pre-wrap;
+}
+
+
+/* INDEX */
+
+.input-file-label {
+    margin-top: -8px;
+}
+
+fieldset .form-group:first-of-type {
+    padding-bottom: 16px;
+}
+
+.note {
+    margin-top: 10px;
+    margin-bottom: 0px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
