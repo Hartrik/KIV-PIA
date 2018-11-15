@@ -18,19 +18,21 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 /**
  * Contains global exception handlers.
  *
- * @version 2017-04-14
+ * @version 2018-11-15
  * @author Patrik Harag
  */
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-    private static final String ERROR_VIEW = "error";
+    private String getFallBackView() {
+        return "forward:/index";
+    }
 
     @ExceptionHandler(NoHandlerFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ModelAndView handle404()   {
-        ModelAndView model = new ModelAndView(ERROR_VIEW);
-        model.getModel().put("message", "Page not found!");
+    public ModelAndView handle404() {
+        ModelAndView model = new ModelAndView(getFallBackView());
+        model.getModel().put("error", "Page not found!");
         return model;
     }
 
@@ -44,24 +46,24 @@ public class GlobalExceptionHandler {
     })
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ModelAndView handle400()   {
-        ModelAndView model = new ModelAndView(ERROR_VIEW);
-        model.getModel().put("message", "Bad request :)");
+        ModelAndView model = new ModelAndView(getFallBackView());
+        model.getModel().put("error", "Bad request :)");
         return model;
     }
 
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     @ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
     public ModelAndView handle405()   {
-        ModelAndView model = new ModelAndView(ERROR_VIEW);
-        model.getModel().put("message", "Method not allowed!");
+        ModelAndView model = new ModelAndView(getFallBackView());
+        model.getModel().put("error", "Method not allowed!");
         return model;
     }
 
     @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
     @ResponseStatus(HttpStatus.UNSUPPORTED_MEDIA_TYPE)
     public ModelAndView handle415()   {
-        ModelAndView model = new ModelAndView(ERROR_VIEW);
-        model.getModel().put("message", "Unsupported media type!");
+        ModelAndView model = new ModelAndView(getFallBackView());
+        model.getModel().put("error", "Unsupported media type!");
         return model;
     }
 
@@ -71,29 +73,9 @@ public class GlobalExceptionHandler {
         // server errors :(
         e.printStackTrace(System.err);
 
-        ModelAndView model = new ModelAndView(ERROR_VIEW);
-        model.getModel().put("message", "Server error!");
+        ModelAndView model = new ModelAndView(getFallBackView());
+        model.getModel().put("error", "Server error!");
         return model;
     }
-
-//    @ExceptionHandler({ConverterException.class})
-//    @ResponseStatus(HttpStatus.BAD_REQUEST)
-//    public ModelAndView handleConverterException(Exception e)   {
-//        Throwable cause = e.getCause();
-//
-//        if (!(cause instanceof StupidClientException)) {
-//            // this might be serious!
-//            e.printStackTrace(System.err);
-//        }
-//
-//        ModelAndView model = new ModelAndView(ERROR_VIEW);
-//        String msg = "Exception while converting: " + cause.getMessage();
-//
-//        msg = HtmlUtils.htmlEscape(msg);
-//        msg = msg.replace("\n", "<br>");
-//
-//        model.getModel().put("message", msg);
-//        return model;
-//    }
 
 }
