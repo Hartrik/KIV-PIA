@@ -1,1 +1,1 @@
-web:    java -jar build/java-bank-web-app.jar
+web:    java -jar build/libs/java-bank-web-app.jar
