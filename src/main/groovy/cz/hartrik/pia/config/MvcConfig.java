@@ -23,6 +23,7 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
     public void addResourceHandlers(ResourceHandlerRegistry reg) {
         reg.addResourceHandler("/css/**").addResourceLocations("/css/");
         reg.addResourceHandler("/js/**").addResourceLocations("/js/");
+        reg.addResourceHandler("/img/**").addResourceLocations("/img/");
     }
 
     @Bean
