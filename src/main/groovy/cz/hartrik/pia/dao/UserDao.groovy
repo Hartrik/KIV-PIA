@@ -16,19 +16,19 @@ import java.util.concurrent.ConcurrentHashMap
  * @author Patrik Harag
  */
 @Repository
-class UserDaoMemorySmarter implements UserDetailsService {
+class UserDao implements UserDetailsService {
 
     private final Map<String, User> usernameIndex
 
     @Autowired
-    UserDaoMemorySmarter(PasswordEncoder encoder) {
+    UserDao(PasswordEncoder encoder) {
         this.usernameIndex = new ConcurrentHashMap<>()
 
-        save(new User(firstName: 'Alan', secondName: 'Linger', login: 'Admin001',
+        save(new User(id: '1', firstName: 'Alan', secondName: 'Linger', login: 'Admin001', email: 'alan@example.com',
                 password: encoder.encode('1234'), role: User.ROLE_ADMIN))
-        save(new User(firstName: 'Brian', secondName: 'Norrell', login: 'User0001',
+        save(new User(id: '2', firstName: 'Brian', secondName: 'Norrell', login: 'User0001', email: 'brian@example.com',
                 password: encoder.encode('0001'), role: User.ROLE_CUSTOMER))
-        save(new User(firstName: 'Casey', secondName: 'Veres', login: 'User0002',
+        save(new User(id: '3', firstName: 'Casey', secondName: 'Veres', login: 'User0002', email: 'casey@example.com',
                 password: encoder.encode('0002'), role: User.ROLE_CUSTOMER))
     }
 
@@ -42,6 +42,10 @@ class UserDaoMemorySmarter implements UserDetailsService {
 
     User findByAccountNumber(String accountNumber) {
         return usernameIndex.get(accountNumber)
+    }
+
+    Collection<User> getAll() {
+        return usernameIndex.values()
     }
 
     @Override

@@ -21,14 +21,16 @@ class User implements UserDetails {
 
     String role = ROLE_CUSTOMER
 
+    String id
+
     String firstName
     String secondName
-    String phone
+    String personalNumber
     String email
-    String address
 
     String accountNumber
     String cardNumber
+
     String login  // code
     String password   // password
 

@@ -9,16 +9,16 @@ import org.springframework.web.bind.annotation.RequestMapping
 /**
  * Index controller.
  *
- * @version 2018-11-15
+ * @version 2018-11-16
  * @author Patrik Harag
  */
 @Controller
-class IndexController {
+class PublicPagesController {
 
     private void fillAttributes(Model model) {
         Object auth = SecurityContextHolder.getContext().getAuthentication().getPrincipal()
         if (auth instanceof User) {
-            model.addAttribute(auth)
+            model.addAttribute("user", auth)
         }
     }
 
