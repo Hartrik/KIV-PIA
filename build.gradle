@@ -13,20 +13,22 @@ dependencies {
 
     compile "org.eclipse.jetty:jetty-webapp:9.0.6.v20130930"
 
-    compile "org.springframework:spring-web:4.1.6.RELEASE"
-    compile "org.springframework:spring-context:4.1.6.RELEASE"
-    compile "org.springframework:spring-context-support:4.1.6.RELEASE"
-    compile "org.springframework:spring-webmvc:4.1.6.RELEASE"
-    compile "org.springframework:spring-jdbc:4.1.6.RELEASE"
+    compile "org.springframework:spring-web:5.1.1.RELEASE"
+    compile "org.springframework:spring-context:5.1.1.RELEASE"
+    compile "org.springframework:spring-context-support:5.1.1.RELEASE"
+    compile "org.springframework:spring-webmvc:5.1.1.RELEASE"
+    compile "org.springframework:spring-jdbc:5.1.1.RELEASE"
+    compile "org.springframework.security:spring-security-config:5.1.1.RELEASE"
+    compile "org.springframework.security:spring-security-web:5.1.1.RELEASE"
 
     compile "org.postgresql:postgresql:9.4-1201-jdbc4"
     compile "com.heroku.sdk:heroku-jdbc:0.1.1"
     compile "org.freemarker:freemarker:2.3.28"
-    compile "com.fasterxml.jackson.core:jackson-databind:2.8.6"
+    compile "com.fasterxml.jackson.core:jackson-databind:2.9.4"
     compile "log4j:log4j:1.2.16"
 
     testCompile "junit:junit:4.12"
-    testCompile "org.springframework:spring-test:4.1.6.RELEASE"
+    testCompile "org.springframework:spring-test:5.1.1.RELEASE"
     testCompile "com.jayway.jsonpath:json-path:0.8.1"
 }
 

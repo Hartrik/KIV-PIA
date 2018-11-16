@@ -40,7 +40,7 @@
       <div class="row">
         <div class="col-md-8">
           <article>
-            <#if error?has_content>
+            <#if error??>
             <div class="alert alert-danger error-output">${error}</div>
             </#if>
 
@@ -50,24 +50,22 @@
         </div>
 
         <div class="col-md-4 sidebar">
-          <#if !user_name?has_content>
+          <#if !user??>
           <div class="well">
             <h4>Log In</h4>
             <#include "form-login.ftl">
           </div>
-          </#if>
-          <#if user_admin>
+          <#elseif user.role == 'ADMIN'>
           <div class="well">
-            <h4>Administrator <small style="white-space: nowrap">(${user_name})</small></h4>
+            <h4>Administrator <small style="white-space: nowrap">(${user.firstName} ${user.secondName})</small></h4>
             <div class="list-group">
               <a href="/admin/user-management" class="list-group-item">User Management</a>
               <a href="/user/logout" class="list-group-item list-group-item-warning">Log Out</a>
             </div>
           </div>
-          </#if>
-          <#if user_customer>
+          <#elseif user.role == 'CUSTOMER'>
           <div class="well">
-            <h4>Logged <small style="white-space: nowrap">(${user_name})</small></h4>
+            <h4>Logged <small style="white-space: nowrap">(${user.firstName} ${user.secondName})</small></h4>
             <div class="list-group">
               <a href="/ib/account" class="list-group-item">Account Details</a>
               <a href="/user/logout" class="list-group-item list-group-item-warning">Log Out</a>

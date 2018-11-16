@@ -3,19 +3,24 @@ package cz.hartrik.pia;
 import cz.hartrik.pia.config.BaseConfig;
 import java.io.IOException;
 
+import java.util.EnumSet;
+import javax.servlet.DispatcherType;
 import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.servlet.FilterHolder;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.security.web.context.AbstractSecurityWebApplicationInitializer;
 import org.springframework.web.context.ContextLoaderListener;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
+import org.springframework.web.filter.DelegatingFilterProxy;
 import org.springframework.web.servlet.DispatcherServlet;
 
 /**
  * Jetty initializer.
  *
- * @version 2017-04-14
+ * @version 2018-11-16
  * @author Patrik Harag
  */
 class EmbeddedJetty {
@@ -61,6 +66,13 @@ class EmbeddedJetty {
         contextHandler.setContextPath(CONTEXT_PATH);
         contextHandler.addServlet(springServletHolder, MAPPING_URL);
         contextHandler.addEventListener(new ContextLoaderListener(webAppContext));
+
+        // spring security will not work without this
+        // https://stackoverflow.com/questions/30927761/embedded-jetty-doesnt-recognise-spring-mvc-security
+        contextHandler.addFilter(
+                new FilterHolder(new DelegatingFilterProxy(AbstractSecurityWebApplicationInitializer.DEFAULT_FILTER_NAME)),
+                "/*",
+                EnumSet.allOf(DispatcherType.class));
 
         return contextHandler;
     }

@@ -25,7 +25,7 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 public class GlobalExceptionHandler {
 
     private String getFallBackView() {
-        return "forward:/index";
+        return "forward:/";
     }
 
     @ExceptionHandler(NoHandlerFoundException.class)

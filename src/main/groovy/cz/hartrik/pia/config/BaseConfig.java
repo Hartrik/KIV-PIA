@@ -7,13 +7,14 @@ import org.springframework.context.annotation.Configuration;
  * Basic configuration.
  *
  * @author Patrik Harag
- * @version 2017-04-14
+ * @version 2018-11-16
  */
 @Configuration
 @ComponentScan(basePackages = {
         "cz.hartrik.pia.config",
         "cz.hartrik.pia.controller",
         "cz.hartrik.pia.service",
+        "cz.hartrik.pia.dao",
 })
 public class BaseConfig {
 
