@@ -33,6 +33,7 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
         resolver.setCache(true);
         resolver.setPrefix("");
         resolver.setSuffix(".ftl");
+        resolver.setContentType("text/html; charset=UTF-8");
         return resolver;
     }
 
