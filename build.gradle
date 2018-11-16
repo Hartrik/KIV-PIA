@@ -21,7 +21,7 @@ dependencies {
 
     compile "org.postgresql:postgresql:9.4-1201-jdbc4"
     compile "com.heroku.sdk:heroku-jdbc:0.1.1"
-    compile "org.freemarker:freemarker:2.3.23"
+    compile "org.freemarker:freemarker:2.3.28"
     compile "com.fasterxml.jackson.core:jackson-databind:2.8.6"
     compile "log4j:log4j:1.2.16"
 

@@ -1,5 +1,6 @@
 package cz.hartrik.pia.config;
 
+import java.util.Properties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.ViewResolver;
@@ -12,7 +13,7 @@ import org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver;
 /**
  * Spring MVC configuration.
  *
- * @version 2017-04-14
+ * @version 2018-11-16
  * @author Patrik Harag
  */
 @Configuration
@@ -40,6 +41,11 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
         FreeMarkerConfigurer configurer = new FreeMarkerConfigurer();
         configurer.setTemplateLoaderPath("/templates/");
         configurer.setDefaultEncoding("UTF-8");
+
+        Properties properties = new Properties();
+        properties.setProperty("output_format", "HTMLOutputFormat");
+        configurer.setFreemarkerSettings(properties);
+
         return configurer;
     }
 
