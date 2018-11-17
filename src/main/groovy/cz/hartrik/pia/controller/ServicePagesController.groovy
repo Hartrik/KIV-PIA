@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 /**
  * Manage controller.
  *
- * @version 2018-11-16
+ * @version 2018-11-17
  * @author Patrik Harag
  */
 @Controller
@@ -30,9 +30,9 @@ class ServicePagesController {
         Object auth = SecurityContextHolder.getContext().getAuthentication().getPrincipal()
         if (auth instanceof User) {
             model.addAttribute("user", auth)
-            model.addAttribute("users", userDao.getAll().findAll { it.role == User.ROLE_CUSTOMER })
-            model.addAttribute("admins", userDao.getAll().findAll { it.role == User.ROLE_ADMIN })
         }
+        model.addAttribute("users", userDao.getAll().findAll { it.role == User.ROLE_CUSTOMER })
+        model.addAttribute("admins", userDao.getAll().findAll { it.role == User.ROLE_ADMIN })
     }
 
 }
