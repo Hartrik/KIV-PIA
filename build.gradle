@@ -35,6 +35,7 @@ dependencies {
 
     testCompile "junit:junit:4.12"
     testCompile "org.springframework:spring-test:5.1.1.RELEASE"
+    testCompile "org.springframework.security:spring-security-test:5.1.1.RELEASE"
     testCompile "com.jayway.jsonpath:json-path:0.8.1"
 }
 

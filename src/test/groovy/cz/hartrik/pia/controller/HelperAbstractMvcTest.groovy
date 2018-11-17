@@ -3,6 +3,7 @@ package cz.hartrik.pia.controller
 import cz.hartrik.pia.config.BaseConfig
 import org.junit.Before
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.TestContextManager
 import org.springframework.test.context.web.WebAppConfiguration
@@ -13,7 +14,7 @@ import org.springframework.web.context.WebApplicationContext
 
 /**
  *
- * @version 2017-05-03
+ * @version 2018-11-17
  * @author Patrik Harag
  */
 @WebAppConfiguration
@@ -46,7 +47,10 @@ abstract class HelperAbstractMvcTest {
     MockMvc mockMvc
 
     void setupMVC() {
-        mockMvc = MockMvcBuilders.webAppContextSetup(context).build()
+        mockMvc = MockMvcBuilders
+                .webAppContextSetup(context)
+                .apply(SecurityMockMvcConfigurers.springSecurity())
+                .build()
     }
 
     // ---
