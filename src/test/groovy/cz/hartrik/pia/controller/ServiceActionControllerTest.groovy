@@ -14,7 +14,6 @@ class ServiceActionControllerTest extends HelperAbstractMvcTest {
     @Test
     void notLogged() {
         get("/service/a/remove-user?id=1").andExpect(status().isUnauthorized())
-        get("/service/a/remove-user?id=bla").andExpect(status().isUnauthorized())
     }
 
 }
