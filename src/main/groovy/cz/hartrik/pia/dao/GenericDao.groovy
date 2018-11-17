@@ -1,5 +1,6 @@
 package cz.hartrik.pia.dao
 
+import cz.hartrik.pia.ObjectNotFoundException
 import cz.hartrik.pia.dto.DataTransferObject
 
 /**
@@ -34,6 +35,6 @@ interface GenericDao<E extends DataTransferObject<PK>, PK extends Serializable> 
      *
      * @param id if of the entity instance
      */
-    void delete(PK id)
+    void delete(PK id) throws ObjectNotFoundException
 
 }

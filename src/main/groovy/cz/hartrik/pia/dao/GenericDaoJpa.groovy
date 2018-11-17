@@ -1,5 +1,6 @@
 package cz.hartrik.pia.dao
 
+import cz.hartrik.pia.ObjectNotFoundException
 import cz.hartrik.pia.dto.DataTransferObject
 
 import javax.persistence.EntityManager
@@ -75,9 +76,10 @@ class GenericDaoJpa<E extends DataTransferObject<PK>, PK extends Serializable> i
     void delete(PK id) {
         E e = entityManager.find(persistedClass, id)
         if (e != null) {
-            entityManager.remove(id)
+            entityManager.remove(e)
+        } else {
+            throw new ObjectNotFoundException("User with id='$id' not found")
         }
     }
-
 
 }

@@ -1,5 +1,6 @@
 package cz.hartrik.pia.controller;
 
+import cz.hartrik.pia.WrongInputException;
 import org.springframework.beans.TypeMismatchException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -18,7 +19,7 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 /**
  * Contains global exception handlers.
  *
- * @version 2018-11-15
+ * @version 2018-11-17
  * @author Patrik Harag
  */
 @ControllerAdvice
@@ -43,11 +44,12 @@ public class GlobalExceptionHandler {
             MethodArgumentNotValidException.class,
             HttpMessageNotReadableException.class,
             TypeMismatchException.class,
+            WrongInputException.class,
     })
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ModelAndView handle400()   {
+    public ModelAndView handle400(Exception ex)   {
         ModelAndView model = new ModelAndView(getFallBackView());
-        model.getModel().put("error", "Bad request :)");
+        model.getModel().put("error", "Bad request: " + ex.getMessage());
         return model;
     }
 

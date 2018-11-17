@@ -8,7 +8,7 @@ import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.RequestMapping
 
 /**
- * Manage controller.
+ * Service pages controller.
  *
  * @version 2018-11-17
  * @author Patrik Harag

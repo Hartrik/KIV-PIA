@@ -11,7 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder
 
 /**
  * @author Patrik Harag
- * @version 2018-11-16
+ * @version 2018-11-17
  */
 @Configuration
 @EnableWebSecurity
@@ -28,8 +28,8 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf().disable()
                 .httpBasic().and()
                 .authorizeRequests()
-                    .antMatchers("/service/*").hasAuthority(User.ROLE_ADMIN)
-                    .antMatchers("/ib/*").hasAuthority(User.ROLE_CUSTOMER)
+                    .antMatchers("/service/**").hasAuthority(User.ROLE_ADMIN)
+                    .antMatchers("/ib/**").hasAuthority(User.ROLE_CUSTOMER)
                     .anyRequest().permitAll()
                     .and()
                 .formLogin()
