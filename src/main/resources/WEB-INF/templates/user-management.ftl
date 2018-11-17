@@ -3,6 +3,8 @@
 <#assign page_title="User Management"/>
 
 <#macro page_body>
+<#include "dialog-confirm-delete.ftl">
+
 <h2>Customers</h2>
 <div class="table-responsive">
   <table class="table table-bordered table-condensed table-striped table-hover">
@@ -17,7 +19,7 @@
            class="btn btn-default btn-xs">Show</a>
         <a href="#" class="btn btn-danger btn-xs"
            data-href="/service/a/remove-user?id=${u.id}"
-           data-toggle="modal" data-target="#confirm-delete">Remove</a>
+           data-toggle="modal" data-target="#dialog-confirm-delete">Remove</a>
       </td>
     </tr>
     </#list>
