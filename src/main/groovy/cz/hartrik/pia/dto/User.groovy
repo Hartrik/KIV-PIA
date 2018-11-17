@@ -32,12 +32,9 @@ class User implements UserDetails, DataTransferObject<String> {
     String id
 
     String firstName
-    String secondName
+    String lastName
     String personalNumber
     String email
-
-    String accountNumber
-    String cardNumber
 
     String login  // code
     String password   // password

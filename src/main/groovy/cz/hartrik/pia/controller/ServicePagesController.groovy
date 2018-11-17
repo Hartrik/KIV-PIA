@@ -3,7 +3,6 @@ package cz.hartrik.pia.controller
 import cz.hartrik.pia.dao.UserDao
 import cz.hartrik.pia.dto.User
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.RequestMapping
@@ -15,24 +14,24 @@ import org.springframework.web.bind.annotation.RequestMapping
  * @author Patrik Harag
  */
 @Controller
+@RequestMapping("/service")
 class ServicePagesController {
 
     @Autowired
     private UserDao userDao
 
-    @RequestMapping("/service/user-management")
+    @RequestMapping("user-management")
     String pricingHandler(Model model) {
-        fillAttributes(model)
+        Utils.fillLayoutAttributes(model)
+        model.addAttribute("users", userDao.getAll().findAll { it.role == User.ROLE_CUSTOMER })
+        model.addAttribute("admins", userDao.getAll().findAll { it.role == User.ROLE_ADMIN })
         return "user-management"
     }
 
-    private void fillAttributes(Model model) {
-        Object auth = SecurityContextHolder.getContext().getAuthentication().getPrincipal()
-        if (auth instanceof User) {
-            model.addAttribute("user", auth)
-        }
-        model.addAttribute("users", userDao.getAll().findAll { it.role == User.ROLE_CUSTOMER })
-        model.addAttribute("admins", userDao.getAll().findAll { it.role == User.ROLE_ADMIN })
+    @RequestMapping("create-user")
+    String createUserHandler(Model model) {
+        Utils.fillLayoutAttributes(model)
+        return "user-create"
     }
 
 }

@@ -10,7 +10,7 @@
     <#list users as u>
     <tr>
       <td class="col-content">${u.id}</td>
-      <td class="col-content">${u.firstName} ${u.secondName}</td>
+      <td class="col-content">${u.firstName} ${u.lastName}</td>
       <td class="col-content"><a href="mailto:${u.email}">${u.email}</td>
       <td class="col-action">
         <a href="/service/user-management?id=${u.id}"
@@ -31,7 +31,7 @@
     <#list admins as u>
     <tr>
       <td class="col-content">${u.id}</td>
-      <td class="col-content">${u.firstName} ${u.secondName}</td>
+      <td class="col-content">${u.firstName} ${u.lastName}</td>
       <td class="col-content"><a href="mailto:${u.email}">${u.email}</td>
     </tr>
     </#list>

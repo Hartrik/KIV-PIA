@@ -57,15 +57,16 @@
           </div>
           <#elseif user.role == 'ADMIN'>
           <div class="well">
-            <h4>Administrator <small style="white-space: nowrap">(${user.firstName} ${user.secondName})</small></h4>
+            <h4>Administrator <small style="white-space: nowrap">(${user.firstName} ${user.lastName})</small></h4>
             <div class="list-group">
               <a href="/service/user-management" class="list-group-item">User Management</a>
+              <a href="/service/create-user" class="list-group-item">Create User</a>
               <a href="/user/logout" class="list-group-item list-group-item-warning">Log Out</a>
             </div>
           </div>
           <#elseif user.role == 'CUSTOMER'>
           <div class="well">
-            <h4>Logged <small style="white-space: nowrap">(${user.firstName} ${user.secondName})</small></h4>
+            <h4>Logged <small style="white-space: nowrap">(${user.firstName} ${user.lastName})</small></h4>
             <div class="list-group">
               <a href="/ib/account" class="list-group-item">Account Details</a>
               <a href="/user/logout" class="list-group-item list-group-item-warning">Log Out</a>

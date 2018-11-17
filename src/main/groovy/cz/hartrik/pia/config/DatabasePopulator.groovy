@@ -24,15 +24,15 @@ class DatabasePopulator {
 
     @PostConstruct
     void populateDB() {
-        userDao.save(new User(id: '1', firstName: 'Alan', secondName: 'Linger',
+        userDao.save(new User(id: '1', firstName: 'Alan', lastName: 'Linger',
                 login: 'Admin001', email: 'alan@example.com',
                 password: encoder.encode('1234'), role: User.ROLE_ADMIN))
 
-        userDao.save(new User(id: '2', firstName: 'Brian', secondName: 'Norrell',
+        userDao.save(new User(id: '2', firstName: 'Brian', lastName: 'Norrell',
                 login: 'User0001', email: 'brian@example.com',
                 password: encoder.encode('0001'), role: User.ROLE_CUSTOMER))
 
-        userDao.save(new User(id: '3', firstName: 'Casey', secondName: 'Veres',
+        userDao.save(new User(id: '3', firstName: 'Casey', lastName: 'Veres',
                 login: 'User0002', email: 'casey@example.com',
                 password: encoder.encode('0002'), role: User.ROLE_CUSTOMER))
     }
