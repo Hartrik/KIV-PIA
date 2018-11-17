@@ -19,6 +19,13 @@ class PublicPagesController {
         return "about"
     }
 
+    @RequestMapping("/login-failed")
+    String loginFailedHandler(Model model) {
+        Utils.fillLayoutAttributes(model)
+        model.addAttribute("error", "Wrong username or password")
+        return "about"
+    }
+
     @RequestMapping("/pricing")
     String pricingHandler(Model model) {
         Utils.fillLayoutAttributes(model)

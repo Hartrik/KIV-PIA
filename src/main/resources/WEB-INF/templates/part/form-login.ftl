@@ -1,4 +1,4 @@
-<form class="form-horizontal" action="/user/login" method="POST">
+<form class="form-horizontal" action="/login" method="POST">
   <div class="form-group">
     <label class="control-label col-sm-3" for="login-id">Name</label>
     <div class="col-sm-9">
