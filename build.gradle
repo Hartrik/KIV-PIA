@@ -23,6 +23,7 @@ dependencies {
     compile "org.springframework:spring-orm:5.1.1.RELEASE"
 
     compile "org.hibernate:hibernate-core:5.3.7.Final"
+    compile "org.hibernate:hibernate-c3p0:5.3.7.Final"
     compile 'org.apache.derby:derby:10.14.2.0'
     compile 'org.apache.derby:derbyclient:10.14.2.0'
     compile "org.postgresql:postgresql:9.4-1201-jdbc4"

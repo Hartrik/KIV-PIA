@@ -1,6 +1,7 @@
 package cz.hartrik.pia.config
 
 import org.hibernate.SessionFactory
+import org.hibernate.c3p0.internal.C3P0ConnectionProvider
 import org.hibernate.dialect.Dialect
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Bean
@@ -36,14 +37,27 @@ class PersistenceConfig {
         LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean()
         sessionFactory.setDataSource(dataSource)
         sessionFactory.setPackagesToScan('cz.hartrik.pia.dto')
-
-        def properties = new Properties()
-        properties['hibernate.hbm2ddl.auto'] = 'create'  // update
-        properties['hibernate.dialect'] = dialect.class.name
-        properties['hibernate.validator.apply_to_ddl'] = 'true'
-        sessionFactory.setHibernateProperties(properties)
-
+        sessionFactory.setHibernateProperties(initProperties(dialect))
         return sessionFactory
+    }
+
+    private static Properties initProperties(Dialect dialect) {
+        def properties = new Properties()
+
+        // basic properties
+        properties.'hibernate.hbm2ddl.auto' = 'create'  // update
+        properties.'hibernate.dialect' = dialect.class.name
+        properties.'hibernate.validator.apply_to_ddl' = 'true'
+
+        // connection pool
+        properties.'connection.provider_class' = C3P0ConnectionProvider.name
+        properties.'hibernate.c3p0.min_size' = '5'
+        properties.'hibernate.c3p0.max_size' = '20'
+        properties.'hibernate.c3p0.timeout' = '300'
+        properties.'hibernate.c3p0.max_statements' = '50'
+        properties.'hibernate.c3p0.idle_test_period' = '300'
+
+        return properties
     }
 
     @Bean
