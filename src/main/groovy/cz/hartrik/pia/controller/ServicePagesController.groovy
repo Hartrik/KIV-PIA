@@ -31,7 +31,7 @@ class ServicePagesController {
     @RequestMapping("create-user")
     String createUserHandler(Model model) {
         Utils.fillLayoutAttributes(model)
-        return "user-create"
+        return "create-user"
     }
 
 }

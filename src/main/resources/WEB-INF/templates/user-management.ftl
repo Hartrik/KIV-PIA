@@ -1,9 +1,9 @@
-<#include "layout.ftl">
+<#include "layout/layout.ftl">
 
 <#assign page_title="User Management"/>
 
 <#macro page_body>
-<#include "dialog-confirm-delete.ftl">
+<#include "part/dialog-confirm-delete.ftl">
 
 <h2>Customers</h2>
 <div class="table-responsive">

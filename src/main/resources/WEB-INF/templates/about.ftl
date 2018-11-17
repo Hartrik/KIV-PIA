@@ -1,4 +1,4 @@
-<#include "layout.ftl">
+<#include "layout/layout.ftl">
 
 <#assign page_title="About"/>
 

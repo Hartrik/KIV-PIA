@@ -53,7 +53,7 @@
           <#if !user??>
           <div class="well">
             <h4>Log In</h4>
-            <#include "form-login.ftl">
+            <#include "../part/form-login.ftl">
           </div>
           <#elseif user.role == 'ADMIN'>
           <div class="well">
