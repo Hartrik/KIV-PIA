@@ -3,27 +3,27 @@ package cz.hartrik.pia.controller
 import cz.hartrik.pia.dao.UserDao
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Controller
+import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestParam
 
 /**
- * Service actions controller.
+ * Internet banking pages controller.
  *
  * @version 2018-11-17
  * @author Patrik Harag
  */
 @Controller
-@RequestMapping('/service/a')
-class ServiceActionController {
+@RequestMapping("/ib")
+class IBPagesController {
 
     @Autowired
     private UserDao userDao
 
-    @RequestMapping('remove-user')
-    String pricingHandler(@RequestParam(name = 'id') String id) {
-        userDao.delete(id)
-
-        return 'redirect:/service/user-management'
+    @RequestMapping("edit-user")
+    String createUserHandler(Model model) {
+        ControllerUtils.fillLayoutAttributes(model)
+        model.addAttribute("default", ControllerUtils.getUser())
+        return "edit-user"
     }
 
 }

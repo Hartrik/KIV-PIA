@@ -1,6 +1,7 @@
 package cz.hartrik.pia.controller;
 
 import cz.hartrik.pia.WrongInputException;
+import javax.servlet.ServletException;
 import org.springframework.beans.TypeMismatchException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -69,14 +70,17 @@ public class GlobalExceptionHandler {
         return model;
     }
 
-    @ExceptionHandler(RuntimeException.class)
+    @ExceptionHandler({
+            RuntimeException.class,
+            ServletException.class
+    })
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ModelAndView handleUnknownException(RuntimeException e) {
         // server errors :(
         e.printStackTrace(System.err);
 
         ModelAndView model = new ModelAndView(getFallBackView());
-        model.getModel().put("error", "Server error!");
+        model.getModel().put("error", "Server error: " + e.getMessage());
         return model;
     }
 

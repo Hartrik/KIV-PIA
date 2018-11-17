@@ -22,7 +22,7 @@ class ServicePagesController {
 
     @RequestMapping("user-management")
     String pricingHandler(Model model) {
-        Utils.fillLayoutAttributes(model)
+        ControllerUtils.fillLayoutAttributes(model)
         model.addAttribute("users", userDao.getAll().findAll { it.role == User.ROLE_CUSTOMER })
         model.addAttribute("admins", userDao.getAll().findAll { it.role == User.ROLE_ADMIN })
         return "user-management"
@@ -30,7 +30,7 @@ class ServicePagesController {
 
     @RequestMapping("create-user")
     String createUserHandler(Model model) {
-        Utils.fillLayoutAttributes(model)
+        ControllerUtils.fillLayoutAttributes(model)
         return "create-user"
     }
 

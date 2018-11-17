@@ -15,26 +15,26 @@ class PublicPagesController {
 
     @RequestMapping(["", "/index", "/about"])
     String indexHandler(Model model) {
-        Utils.fillLayoutAttributes(model)
+        ControllerUtils.fillLayoutAttributes(model)
         return "about"
     }
 
     @RequestMapping("/login-failed")
     String loginFailedHandler(Model model) {
-        Utils.fillLayoutAttributes(model)
+        ControllerUtils.fillLayoutAttributes(model)
         model.addAttribute("error", "Wrong username or password")
         return "about"
     }
 
     @RequestMapping("/pricing")
     String pricingHandler(Model model) {
-        Utils.fillLayoutAttributes(model)
+        ControllerUtils.fillLayoutAttributes(model)
         return "pricing"
     }
 
     @RequestMapping("/contact")
     String contactHandler(Model model) {
-        Utils.fillLayoutAttributes(model)
+        ControllerUtils.fillLayoutAttributes(model)
         return "contact"
     }
 

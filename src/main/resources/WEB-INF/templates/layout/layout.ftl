@@ -68,7 +68,7 @@
           <div class="well">
             <h4>Logged <small style="white-space: nowrap">(${user.firstName} ${user.lastName})</small></h4>
             <div class="list-group">
-              <a href="/ib/account" class="list-group-item">Account Details</a>
+              <a href="/ib/edit-user" class="list-group-item">Edit Contact Information</a>
               <a href="/logout" class="list-group-item list-group-item-warning">Log Out</a>
             </div>
           </div>

@@ -9,7 +9,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * @version 2018-11-17
  * @author Patrik Harag
  */
-class ServiceActionControllerTest extends HelperAbstractMvcTest {
+class ServiceActionsControllerTest extends HelperAbstractMvcTest {
 
     @Test
     void notLogged() {
