@@ -45,7 +45,7 @@ class User implements UserDetails, DataTransferObject<Integer> {
     @Column(nullable = false)
     String password   // password
 
-    @OneToMany(orphanRemoval = true)
+    @OneToMany
     Set<Account> accounts
 
     // UserDetails

@@ -25,7 +25,7 @@ class Account implements DataTransferObject<Integer> {
     BigDecimal balance
 
     @ManyToOne
-    @JoinColumn(nullable = false)
+    @JoinColumn
     User owner
 
     @JoinColumn(nullable = false, unique = true)
@@ -37,9 +37,9 @@ class Account implements DataTransferObject<Integer> {
     @Column(nullable = false, length = 3)
     Currency currency
 
-    @OneToMany(orphanRemoval = true, mappedBy = "sender")
+    @OneToMany(mappedBy = "sender")
     Set<Transaction> outcomingStatements
-    @OneToMany(orphanRemoval = true, mappedBy = "receiver")
+    @OneToMany(mappedBy = "receiver")
     Set<Transaction> incomingStatements
 
 }
