@@ -8,6 +8,6 @@ import org.springframework.security.core.userdetails.UserDetailsService
  * @version 2018-11-17
  * @author Patrik Harag
  */
-interface UserDao extends UserDetailsService, GenericDao<User, String> {
+interface UserDao extends UserDetailsService, GenericDao<User, Integer> {
 
 }

@@ -13,7 +13,7 @@ import javax.persistence.NoResultException
  * @author Patrik Harag
  */
 @Repository
-class UserDaoJpa extends GenericDaoJpa<User, String> implements UserDao {
+class UserDaoJpa extends GenericDaoJpa<User, Integer> implements UserDao {
 
     UserDaoJpa() {
         super(User)

@@ -10,7 +10,7 @@ import javax.annotation.PostConstruct
 
 /**
  *
- * @version 2018-11-17
+ * @version 2018-11-20
  * @author Patrik Harag
  */
 @Configuration
@@ -24,16 +24,19 @@ class DatabasePopulator {
 
     @PostConstruct
     void populateDB() {
-        userDao.save(new User(id: '1', firstName: 'Alan', lastName: 'Linger',
-                login: 'Admin001', email: 'alan@example.com',
-                password: encoder.encode('1234'), role: User.ROLE_ADMIN))
+        userDao.save(new User(id: 1, firstName: 'Alan', lastName: 'Linger',
+                email: 'alan@example.com', personalNumber: '123456',
+                role: User.ROLE_ADMIN,
+                login: 'Admin001', password: encoder.encode('1234')))
 
-        userDao.save(new User(id: '2', firstName: 'Brian', lastName: 'Norrell',
-                login: 'User0001', email: 'brian@example.com',
-                password: encoder.encode('0001'), role: User.ROLE_CUSTOMER))
+        userDao.save(new User(id: 2, firstName: 'Brian', lastName: 'Norrell',
+                email: 'brian@example.com', personalNumber: '123456',
+                role: User.ROLE_CUSTOMER,
+                login: 'User0001', password: encoder.encode('0001')))
 
-        userDao.save(new User(id: '3', firstName: 'Casey', lastName: 'Veres',
-                login: 'User0002', email: 'casey@example.com',
-                password: encoder.encode('0002'), role: User.ROLE_CUSTOMER))
+        userDao.save(new User(id: 3, firstName: 'Casey', lastName: 'Veres',
+                email: 'casey@example.com', personalNumber: '123456',
+                role: User.ROLE_CUSTOMER,
+                login: 'User0002', password: encoder.encode('0002')))
     }
 }

@@ -6,38 +6,47 @@ import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
 
-import javax.persistence.Entity
-import javax.persistence.Id
-import javax.persistence.Table
-import javax.persistence.Transient
+import javax.persistence.*
 
 /**
  *
- * @version 2018-11-17
+ * @version 2018-11-20
  * @author Patrik Harag
  */
 @EqualsAndHashCode
 @ToString
 @Entity
 @Table(name = 'table_user')
-class User implements UserDetails, DataTransferObject<String> {
+class User implements UserDetails, DataTransferObject<Integer> {
 
     static final String ROLE_CUSTOMER = 'CUSTOMER'
     static final String ROLE_ADMIN = 'ADMIN'
 
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @Column(nullable = false)
+    Integer id
+
+    @Column(nullable = false)
     String role = ROLE_CUSTOMER
 
-    @Id
-    String id
-
+    @Column(nullable = false)
     String firstName
+    @Column(nullable = false)
     String lastName
+    @Column(nullable = false)
     String personalNumber
+    @Column(nullable = false)
     String email
 
+    @Column(nullable = false)
     String login  // code
+    @Column(nullable = false)
     String password   // password
+
+    @OneToMany(orphanRemoval = true)
+    Set<Account> accounts
 
     // UserDetails
 
@@ -83,11 +92,4 @@ class User implements UserDetails, DataTransferObject<String> {
         return true
     }
 
-    // DataTransferObject
-
-    @Override
-    @Transient
-    String getPK() {
-        return id
-    }
 }

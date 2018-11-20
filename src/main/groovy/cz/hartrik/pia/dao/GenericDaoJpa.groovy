@@ -32,7 +32,7 @@ class GenericDaoJpa<E extends DataTransferObject<PK>, PK extends Serializable> i
     @Override
     @Transactional
     E save(E instance) {
-        if (instance.getPK() == null) {
+        if (instance.getId() == null) {
             // pokud existuje záznam s PK, tak vyhodí chybu
             entityManager.persist(instance)
             return instance

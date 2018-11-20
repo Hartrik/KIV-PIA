@@ -12,6 +12,6 @@ interface DataTransferObject<PK extends Serializable> {
      *
      * @return  primary key of the instance
      */
-    PK getPK()
+    PK getId()
 
 }
