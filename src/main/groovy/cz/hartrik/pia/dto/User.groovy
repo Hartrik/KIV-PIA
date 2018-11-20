@@ -40,7 +40,7 @@ class User implements UserDetails, DataTransferObject<Integer> {
     @Column(nullable = false)
     String email
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     String login  // code
     @Column(nullable = false)
     String password   // password

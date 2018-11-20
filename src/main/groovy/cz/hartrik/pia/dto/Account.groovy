@@ -28,9 +28,9 @@ class Account implements DataTransferObject<Integer> {
     @JoinColumn(nullable = false)
     User owner
 
-    @JoinColumn(nullable = false)
+    @JoinColumn(nullable = false, unique = true)
     String accountNumber
-    @JoinColumn(nullable = false)
+    @JoinColumn(nullable = false, unique = true)
     String cardNumber
 
     @Enumerated(EnumType.STRING)
