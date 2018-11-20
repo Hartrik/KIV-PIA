@@ -22,7 +22,7 @@ class ServiceActionsController {
     private UserDao userDao
 
     @RequestMapping('remove-user')
-    String pricingHandler(HttpServletRequest request, @RequestParam String id) {
+    String removeUserHandler(HttpServletRequest request, @RequestParam String id) {
         userDao.delete(id)
 
         return ControllerUtils.redirectBack(request)

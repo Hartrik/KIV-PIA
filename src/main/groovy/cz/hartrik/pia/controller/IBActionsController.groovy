@@ -25,7 +25,7 @@ class IBActionsController {
     private UserDao userDao
 
     @RequestMapping(path = "edit-user", method = RequestMethod.POST)
-    String createUserHandler(
+    String editUserHandler(
             HttpServletRequest request,
             @RequestParam String id,
             @RequestParam String firstName,

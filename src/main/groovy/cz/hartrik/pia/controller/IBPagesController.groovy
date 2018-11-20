@@ -20,7 +20,7 @@ class IBPagesController {
     private UserDao userDao
 
     @RequestMapping("edit-user")
-    String createUserHandler(Model model) {
+    String editUserHandler(Model model) {
         ControllerUtils.fillLayoutAttributes(model)
         model.addAttribute("default", ControllerUtils.getUser())
         return "edit-user"

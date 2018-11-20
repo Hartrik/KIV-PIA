@@ -21,7 +21,7 @@ class ServicePagesController {
     private UserDao userDao
 
     @RequestMapping("user-management")
-    String pricingHandler(Model model) {
+    String userManagementHandler(Model model) {
         ControllerUtils.fillLayoutAttributes(model)
         model.addAttribute("users", userDao.getAll().findAll { it.role == User.ROLE_CUSTOMER })
         model.addAttribute("admins", userDao.getAll().findAll { it.role == User.ROLE_ADMIN })
