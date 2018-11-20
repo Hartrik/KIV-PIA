@@ -45,7 +45,7 @@ class PersistenceConfig {
         def properties = new Properties()
 
         // basic properties
-        properties.'hibernate.hbm2ddl.auto' = 'create'  // update
+        properties.'hibernate.hbm2ddl.auto' = 'update'
         properties.'hibernate.dialect' = dialect.class.name
         properties.'hibernate.validator.apply_to_ddl' = 'true'
 
