@@ -5,11 +5,9 @@ import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.stereotype.Repository
 
-import javax.persistence.NoResultException
-
 /**
  *
- * @version 2018-11-17
+ * @version 2018-11-21
  * @author Patrik Harag
  */
 @Repository
@@ -23,9 +21,10 @@ class UserDaoJpa extends GenericDaoJpa<User, Integer> implements UserDao {
 
     @Override
     UserDetails loadUserByUsername(String login) throws UsernameNotFoundException {
-        try {
-            return getByAttribute("login", login)
-        } catch (NoResultException e) {
+        def user = getByAttribute("login", login)
+        if (user) {
+            return user
+        } else {
             throw new UsernameNotFoundException('User not found')
         }
     }

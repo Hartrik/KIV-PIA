@@ -10,7 +10,7 @@ import javax.annotation.PostConstruct
 
 /**
  *
- * @version 2018-11-20
+ * @version 2018-11-21
  * @author Patrik Harag
  */
 @Configuration
@@ -24,19 +24,26 @@ class DatabasePopulator {
 
     @PostConstruct
     void populateDB() {
-        userDao.save(new User(id: 1, firstName: 'Alan', lastName: 'Linger',
+        register(new User(id: 1, firstName: 'Alan', lastName: 'Linger',
                 email: 'alan@example.com', personalNumber: '123456',
                 role: User.ROLE_ADMIN,
                 login: 'Admin001', password: encoder.encode('1234')))
 
-        userDao.save(new User(id: 2, firstName: 'Brian', lastName: 'Norrell',
+        register(new User(id: 2, firstName: 'Brian', lastName: 'Norrell',
                 email: 'brian@example.com', personalNumber: '123456',
                 role: User.ROLE_CUSTOMER,
                 login: 'User0001', password: encoder.encode('0001')))
 
-        userDao.save(new User(id: 3, firstName: 'Casey', lastName: 'Veres',
+        register(new User(id: 3, firstName: 'Casey', lastName: 'Veres',
                 email: 'casey@example.com', personalNumber: '123456',
                 role: User.ROLE_CUSTOMER,
                 login: 'User0002', password: encoder.encode('0002')))
     }
+
+    private def register(User newUser) {
+        if (!userDao.getByAttribute('login', newUser.login)) {
+            userDao.save(newUser)
+        }
+    }
+
 }

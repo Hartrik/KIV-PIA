@@ -26,6 +26,11 @@ interface GenericDao<E extends DataTransferObject<PK>, PK extends Serializable> 
      */
     E getById(PK id)
 
+    /**
+     * @param name
+     * @param value
+     * @return instance with the given id or null if not found
+     */
     E getByAttribute(String name, String value)
 
     Collection<E> getAll()

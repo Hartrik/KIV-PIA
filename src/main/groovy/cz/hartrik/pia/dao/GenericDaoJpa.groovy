@@ -4,13 +4,14 @@ import cz.hartrik.pia.ObjectNotFoundException
 import cz.hartrik.pia.dto.DataTransferObject
 
 import javax.persistence.EntityManager
+import javax.persistence.NoResultException
 import javax.persistence.PersistenceContext
 import javax.transaction.Transactional
 
 /**
  * JPA implementation of the GenericDao interface.
  *
- * @version 2018-11-17
+ * @version 2018-11-21
  * @author Patrik Harag
  */
 class GenericDaoJpa<E extends DataTransferObject<PK>, PK extends Serializable> implements GenericDao<E, PK> {
@@ -46,7 +47,11 @@ class GenericDaoJpa<E extends DataTransferObject<PK>, PK extends Serializable> i
     @Override
     @Transactional
     E getById(PK id) {
-        return entityManager.find(persistedClass, id)
+        try {
+            return entityManager.find(persistedClass, id)
+        } catch (NoResultException e) {
+            return null
+        }
     }
 
     @Override
@@ -57,7 +62,12 @@ class GenericDaoJpa<E extends DataTransferObject<PK>, PK extends Serializable> i
         criteriaQuery.where(criteriaBuilder.equal(rootQuery.get(name), value))
         criteriaQuery.select(rootQuery)
         def query = entityManager.createQuery(criteriaQuery)
-        return query.getSingleResult()
+
+        try {
+            return query.getSingleResult()
+        } catch (NoResultException e) {
+            return null
+        }
     }
 
     @Override
