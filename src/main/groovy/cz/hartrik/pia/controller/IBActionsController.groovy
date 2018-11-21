@@ -1,7 +1,9 @@
 package cz.hartrik.pia.controller
 
 import cz.hartrik.pia.dao.UserDao
+import cz.hartrik.pia.dto.Currency
 import cz.hartrik.pia.dto.User
+import cz.hartrik.pia.service.AccountManager
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.access.AccessDeniedException
 import org.springframework.stereotype.Controller
@@ -10,11 +12,12 @@ import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.bind.annotation.RequestParam
 
 import javax.servlet.http.HttpServletRequest
+import javax.transaction.Transactional
 
 /**
  * Internet banking actions controller.
  *
- * @version 2018-11-17
+ * @version 2018-11-21
  * @author Patrik Harag
  */
 @Controller
@@ -24,10 +27,14 @@ class IBActionsController {
     @Autowired
     private UserDao userDao
 
+    @Autowired
+    private AccountManager accountManager
+
+    @Transactional  // TODO: create service
     @RequestMapping(path = "edit-user", method = RequestMethod.POST)
     String editUserHandler(
             HttpServletRequest request,
-            @RequestParam String id,
+            @RequestParam Integer id,
             @RequestParam String firstName,
             @RequestParam String lastName,
             @RequestParam String personalNumber,
@@ -48,9 +55,12 @@ class IBActionsController {
         user.email = email
         userDao.save(user)
 
-        userDao.getAll().each {
-            println it
-        }
+        return ControllerUtils.redirectBack(request)
+    }
+
+    @RequestMapping(path = "create-account", method = RequestMethod.POST)
+    String createAccountHandler(HttpServletRequest request, @RequestParam Currency currency) {
+        accountManager.createAccount(currency, ControllerUtils.getUser())
 
         return ControllerUtils.redirectBack(request)
     }

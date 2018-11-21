@@ -1,6 +1,7 @@
 package cz.hartrik.pia.dao
 
 import cz.hartrik.pia.dto.User
+import groovy.transform.PackageScope
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.stereotype.Repository
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Repository
  * @author Patrik Harag
  */
 @Repository
+@PackageScope
 class UserDaoJpa extends GenericDaoJpa<User, Integer> implements UserDao {
 
     UserDaoJpa() {

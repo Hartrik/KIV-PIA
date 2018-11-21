@@ -7,7 +7,7 @@ import javax.persistence.*
 
 /**
  *
- * @version 2018-11-20
+ * @version 2018-11-21
  * @author Patrik Harag
  */
 @EqualsAndHashCode
@@ -28,18 +28,18 @@ class Account implements DataTransferObject<Integer> {
     @JoinColumn
     User owner
 
-    @JoinColumn(nullable = false, unique = true)
+    @Column(nullable = false, unique = true)
     String accountNumber
-    @JoinColumn(nullable = false, unique = true)
+    @Column(nullable = false, unique = true)
     String cardNumber
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 3)
     Currency currency
 
-    @OneToMany(mappedBy = "sender")
+    @OneToMany(mappedBy = "sender", fetch = FetchType.EAGER)  // TODO
     Set<Transaction> outcomingStatements
-    @OneToMany(mappedBy = "receiver")
+    @OneToMany(mappedBy = "receiver", fetch = FetchType.EAGER)  // TODO
     Set<Transaction> incomingStatements
 
 }

@@ -2,6 +2,7 @@ package cz.hartrik.pia.dao
 
 import cz.hartrik.pia.ObjectNotFoundException
 import cz.hartrik.pia.dto.DataTransferObject
+import groovy.transform.PackageScope
 
 import javax.persistence.EntityManager
 import javax.persistence.NoResultException
@@ -14,6 +15,7 @@ import javax.transaction.Transactional
  * @version 2018-11-21
  * @author Patrik Harag
  */
+@PackageScope
 class GenericDaoJpa<E extends DataTransferObject<PK>, PK extends Serializable> implements GenericDao<E, PK> {
 
     @PersistenceContext
@@ -55,6 +57,7 @@ class GenericDaoJpa<E extends DataTransferObject<PK>, PK extends Serializable> i
     }
 
     @Override
+    @Transactional
     E getByAttribute(String name, String value) {
         def criteriaBuilder = entityManager.getCriteriaBuilder()
         def criteriaQuery = criteriaBuilder.createQuery(persistedClass)
