@@ -13,8 +13,8 @@ import javax.persistence.*
  * @version 2018-11-22
  * @author Patrik Harag
  */
-@EqualsAndHashCode
-@ToString
+@EqualsAndHashCode(excludes = 'accounts')
+@ToString(excludes = 'accounts')
 @Entity
 @Table(name = 'table_user')
 class User implements UserDetails, DataTransferObject<Integer> {
@@ -45,7 +45,7 @@ class User implements UserDetails, DataTransferObject<Integer> {
     @Column(nullable = false)
     String password   // password
 
-    @OneToMany
+    @OneToMany(mappedBy = 'owner')
     Set<Account> accounts
 
     // UserDetails

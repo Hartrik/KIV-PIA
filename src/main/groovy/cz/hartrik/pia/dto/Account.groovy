@@ -10,8 +10,8 @@ import javax.persistence.*
  * @version 2018-11-22
  * @author Patrik Harag
  */
-@EqualsAndHashCode
-@ToString
+@EqualsAndHashCode(excludes = ['owner', 'outcomingStatements', 'incomingStatements'])
+@ToString(excludes = ['owner', 'outcomingStatements', 'incomingStatements'])
 @Entity
 @Table(name = 'table_account')
 class Account implements DataTransferObject<Integer> {

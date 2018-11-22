@@ -33,8 +33,6 @@ class AccountManagerImpl implements AccountManager {
         account.accountNumber = String.format('6432%06d', account.id)
         account.cardNumber = String.format('1282560512%06d', account.id)
 
-        // TODO: asi se to nespojí s uživatelem
-
         return accountDao.save(account)
     }
 
