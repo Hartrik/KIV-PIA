@@ -10,7 +10,7 @@ import javax.persistence.*
 
 /**
  *
- * @version 2018-11-21
+ * @version 2018-11-22
  * @author Patrik Harag
  */
 @EqualsAndHashCode
@@ -45,7 +45,7 @@ class User implements UserDetails, DataTransferObject<Integer> {
     @Column(nullable = false)
     String password   // password
 
-    @OneToMany(fetch = FetchType.EAGER)  // TODO
+    @OneToMany
     Set<Account> accounts
 
     // UserDetails

@@ -7,7 +7,7 @@ import javax.persistence.*
 
 /**
  *
- * @version 2018-11-21
+ * @version 2018-11-22
  * @author Patrik Harag
  */
 @EqualsAndHashCode
@@ -37,9 +37,9 @@ class Account implements DataTransferObject<Integer> {
     @Column(nullable = false, length = 3)
     Currency currency
 
-    @OneToMany(mappedBy = "sender", fetch = FetchType.EAGER)  // TODO
+    @OneToMany(mappedBy = "sender")
     Set<Transaction> outcomingStatements
-    @OneToMany(mappedBy = "receiver", fetch = FetchType.EAGER)  // TODO
+    @OneToMany(mappedBy = "receiver")
     Set<Transaction> incomingStatements
 
 }
