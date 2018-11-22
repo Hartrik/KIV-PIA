@@ -10,16 +10,16 @@
   <thead>
   <tr>
     <th scope="col">Account Number</th>
-    <th scope="col">Currency</th>
+    <th scope="col">Card Number</th>
     <th scope="col">Balance</th>
   </tr>
   </thead>
   <tbody>
   <#list accounts as account>
   <tr>
-    <td>${account.accountNumber}</td>
-    <td>${account.currency}</td>
-    <td>${account.balance}</td>
+    <td>${account.accountNumberFull}</td>
+    <td>${account.cardNumber}</td>
+    <td>${account.balance} ${account.currency}</td>
   </tr>
   </#list>
   </tbody>

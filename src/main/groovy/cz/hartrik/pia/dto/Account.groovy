@@ -1,5 +1,6 @@
 package cz.hartrik.pia.dto
 
+import cz.hartrik.pia.JavaBank
 import groovy.transform.EqualsAndHashCode
 import groovy.transform.ToString
 
@@ -41,5 +42,10 @@ class Account implements DataTransferObject<Integer> {
     Set<Transaction> outcomingStatements
     @OneToMany(mappedBy = "receiver")
     Set<Transaction> incomingStatements
+
+    @Transient
+    String getAccountNumberFull() {
+        return accountNumber + "/" + JavaBank.CODE
+    }
 
 }
