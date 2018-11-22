@@ -1,7 +1,6 @@
 package cz.hartrik.pia.controller
 
-import cz.hartrik.pia.ObjectNotFoundException
-import cz.hartrik.pia.dao.UserDao
+import cz.hartrik.pia.service.UserManager
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.RequestMapping
@@ -20,13 +19,11 @@ import javax.servlet.http.HttpServletRequest
 class ServiceActionsController {
 
     @Autowired
-    private UserDao userDao
+    private UserManager userManager
 
     @RequestMapping('remove-user')
     String removeUserHandler(HttpServletRequest request, @RequestParam Integer id) {
-        def user = userDao.findById(id)
-                .orElseThrow({ new ObjectNotFoundException("User not found!") })
-        userDao.delete(user)
+        userManager.remove(id)
 
         return ControllerUtils.redirectBack(request)
     }

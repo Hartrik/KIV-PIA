@@ -2,6 +2,7 @@ package cz.hartrik.pia.controller
 
 import cz.hartrik.pia.dao.AccountDao
 import cz.hartrik.pia.dto.Currency
+import cz.hartrik.pia.service.SessionUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
@@ -23,7 +24,7 @@ class IBPagesController {
     @RequestMapping("edit-user")
     String editUserHandler(Model model) {
         ControllerUtils.fillLayoutAttributes(model)
-        model.addAttribute("default", ControllerUtils.getUser())
+        model.addAttribute("default", SessionUtils.getUser())
         return "edit-user"
     }
 

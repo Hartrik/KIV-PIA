@@ -14,13 +14,13 @@ import javax.transaction.Transactional
  * @version 2018-11-22
  * @author Patrik Harag
  */
+@Transactional
 @Service
 class AccountManagerImpl implements AccountManager {
 
     @Autowired
     AccountDao accountDao
 
-    @Transactional
     @Override
     Account createAccount(Currency currency, User user) {
         final def dummyNumber = "0"
