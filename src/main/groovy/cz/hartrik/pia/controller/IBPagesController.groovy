@@ -1,7 +1,6 @@
 package cz.hartrik.pia.controller
 
 import cz.hartrik.pia.dao.AccountDao
-import cz.hartrik.pia.dao.UserDao
 import cz.hartrik.pia.dto.Currency
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Controller
@@ -19,9 +18,6 @@ import org.springframework.web.bind.annotation.RequestMapping
 class IBPagesController {
 
     @Autowired
-    private UserDao userDao
-
-    @Autowired
     private AccountDao accountDao
 
     @RequestMapping("edit-user")
@@ -35,7 +31,7 @@ class IBPagesController {
     String accountsOverviewHandler(Model model) {
         ControllerUtils.fillLayoutAttributes(model)
         model.addAttribute('currencies', Currency.values()*.name())
-        model.addAttribute('accounts', accountDao.getAll())  // TODO: nespojí se to s uživatelem
+        model.addAttribute('accounts', accountDao.findAll())  // TODO: nespojí se to s uživatelem
         return "accounts-overview"
     }
 

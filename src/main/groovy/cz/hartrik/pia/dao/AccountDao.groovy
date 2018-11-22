@@ -1,12 +1,16 @@
 package cz.hartrik.pia.dao
 
 import cz.hartrik.pia.dto.Account
+import org.springframework.data.jpa.repository.JpaRepository
+import org.springframework.stereotype.Repository
 
 /**
+ * Account data access object.
  *
- * @version 2018-11-21
+ * @version 2018-11-22
  * @author Patrik Harag
  */
-interface AccountDao extends GenericDao<Account, Integer> {
+@Repository
+interface AccountDao extends JpaRepository<Account, Integer> {
 
 }

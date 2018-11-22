@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 /**
  * Service pages controller.
  *
- * @version 2018-11-17
+ * @version 2018-11-22
  * @author Patrik Harag
  */
 @Controller
@@ -23,8 +23,9 @@ class ServicePagesController {
     @RequestMapping("user-management")
     String userManagementHandler(Model model) {
         ControllerUtils.fillLayoutAttributes(model)
-        model.addAttribute("users", userDao.getAll().findAll { it.role == User.ROLE_CUSTOMER })
-        model.addAttribute("admins", userDao.getAll().findAll { it.role == User.ROLE_ADMIN })
+        def listOfUsers = userDao.findAll()
+        model.addAttribute("users", listOfUsers.findAll { it.role == User.ROLE_CUSTOMER })
+        model.addAttribute("admins", listOfUsers.findAll { it.role == User.ROLE_ADMIN })
         return "user-management"
     }
 

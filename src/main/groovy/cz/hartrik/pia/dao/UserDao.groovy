@@ -1,13 +1,16 @@
 package cz.hartrik.pia.dao
 
 import cz.hartrik.pia.dto.User
-import org.springframework.security.core.userdetails.UserDetailsService
+import org.springframework.data.jpa.repository.JpaRepository
 
 /**
+ * User data access object.
  *
- * @version 2018-11-17
+ * @version 2018-11-22
  * @author Patrik Harag
  */
-interface UserDao extends UserDetailsService, GenericDao<User, Integer> {
+interface UserDao extends JpaRepository<User, Integer> {
+
+    Optional<User> findByLogin(String login)
 
 }

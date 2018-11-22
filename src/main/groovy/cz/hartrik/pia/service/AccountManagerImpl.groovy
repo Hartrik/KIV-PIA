@@ -1,7 +1,6 @@
 package cz.hartrik.pia.service
 
 import cz.hartrik.pia.dao.AccountDao
-import cz.hartrik.pia.dao.UserDao
 import cz.hartrik.pia.dto.Account
 import cz.hartrik.pia.dto.Currency
 import cz.hartrik.pia.dto.User
@@ -12,7 +11,7 @@ import javax.transaction.Transactional
 
 /**
  *
- * @version 2018-11-21
+ * @version 2018-11-22
  * @author Patrik Harag
  */
 @Service
@@ -20,9 +19,6 @@ class AccountManagerImpl implements AccountManager {
 
     @Autowired
     AccountDao accountDao
-
-    @Autowired
-    UserDao userDao
 
     @Transactional
     @Override

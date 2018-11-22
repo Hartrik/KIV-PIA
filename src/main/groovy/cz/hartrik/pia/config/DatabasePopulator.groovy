@@ -41,7 +41,7 @@ class DatabasePopulator {
     }
 
     private def register(User newUser) {
-        if (!userDao.getByAttribute('login', newUser.login)) {
+        if (!userDao.findByLogin(newUser.login)) {
             userDao.save(newUser)
         }
     }

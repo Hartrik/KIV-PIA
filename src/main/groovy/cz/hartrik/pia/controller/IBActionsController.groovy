@@ -1,5 +1,6 @@
 package cz.hartrik.pia.controller
 
+import cz.hartrik.pia.ObjectNotFoundException
 import cz.hartrik.pia.dao.UserDao
 import cz.hartrik.pia.dto.Currency
 import cz.hartrik.pia.dto.User
@@ -17,7 +18,7 @@ import javax.transaction.Transactional
 /**
  * Internet banking actions controller.
  *
- * @version 2018-11-21
+ * @version 2018-11-22
  * @author Patrik Harag
  */
 @Controller
@@ -40,7 +41,9 @@ class IBActionsController {
             @RequestParam String personalNumber,
             @RequestParam String email) {
 
-        def user = userDao.getById(id)
+        def user = userDao.findById(id)
+                .orElseThrow({ new ObjectNotFoundException("User not found!") })
+
         def currentUser = ControllerUtils.getUser()
         if (user.id != currentUser.id && currentUser.role == User.ROLE_CUSTOMER) {
             throw new AccessDeniedException("User cannot edit other user's account")
