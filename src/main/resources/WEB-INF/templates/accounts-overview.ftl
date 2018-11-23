@@ -6,28 +6,30 @@
 
 <#if accounts?has_content>
 <h2>Accounts</h2>
-<table class="table">
-  <thead>
-  <tr>
-    <th scope="col">Account Number</th>
-    <th scope="col">Card Number</th>
-    <th scope="col">Balance</th>
-    <th scope="col"></th>
-  </tr>
-  </thead>
-  <tbody>
-  <#list accounts as account>
-  <tr>
-    <td>${account.accountNumberFull}</td>
-    <td>${account.cardNumber}</td>
-    <td>${account.balance} ${account.currency}</td>
-    <td>
-      <a href="/ib/account/${account.id}" class="btn btn-primary btn-xs">Show</a>
-    </td>
-  </tr>
-  </#list>
-  </tbody>
-</table>
+<div class="table-responsive">
+  <table class="table table-striped">
+    <thead>
+    <tr>
+      <th scope="col">Account Number</th>
+      <th scope="col">Card Number</th>
+      <th scope="col">Balance</th>
+      <th scope="col"></th>
+    </tr>
+    </thead>
+    <tbody>
+    <#list accounts as account>
+    <tr>
+      <td>${account.accountNumberFull}</td>
+      <td>${account.cardNumber}</td>
+      <td>${account.balance} ${account.currency}</td>
+      <td>
+        <a href="/ib/account/${account.id}" class="btn btn-primary btn-xs">Show</a>
+      </td>
+    </tr>
+    </#list>
+    </tbody>
+  </table>
+</div>
 </#if>
 
 <h2>Create Account</h2>
