@@ -4,7 +4,7 @@ import cz.hartrik.pia.dto.User
 
 /**
  *
- * @version 2018-11-22
+ * @version 2018-11-23
  * @author Patrik Harag
  */
 interface UserManager {
@@ -13,6 +13,7 @@ interface UserManager {
 
     void edit(Integer id, String firstName, String lastName, String personalNumber, String email)
 
-    User getUpdatedAndFullyLoadedUser()
+    User retrieveCurrentUser()
+    User retrieveCurrentUserOrNull()
 
 }

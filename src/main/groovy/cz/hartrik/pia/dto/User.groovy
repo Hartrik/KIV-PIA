@@ -45,7 +45,7 @@ class User implements UserDetails, DataTransferObject<Integer> {
     @Column(nullable = false)
     String password   // password
 
-    @OneToMany(mappedBy = 'owner')
+    @OneToMany(mappedBy = 'owner', fetch = FetchType.EAGER /* they are listed in the menu */)
     Set<Account> accounts
 
     // UserDetails

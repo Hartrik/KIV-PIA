@@ -11,6 +11,10 @@ footer p {
     padding-bottom: 60px;
 }
 
+.nested-group-item {
+    margin-left: 8px;
+}
+
 
 /* ERROR */
 

@@ -2,7 +2,7 @@ package cz.hartrik.pia.controller
 
 import cz.hartrik.pia.dto.Currency
 import cz.hartrik.pia.service.AccountManager
-import cz.hartrik.pia.service.SessionUtils
+
 import cz.hartrik.pia.service.UserManager
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Controller
@@ -44,7 +44,7 @@ class IBActionsController {
 
     @RequestMapping(path = "create-account", method = RequestMethod.POST)
     String createAccountHandler(HttpServletRequest request, @RequestParam Currency currency) {
-        accountManager.createAccount(currency, SessionUtils.getUser())
+        accountManager.createAccount(currency, userManager.retrieveCurrentUser())
 
         return ControllerUtils.redirectBack(request)
     }

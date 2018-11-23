@@ -4,7 +4,7 @@ import cz.hartrik.pia.ObjectNotFoundException
 import cz.hartrik.pia.dao.AccountDao
 import cz.hartrik.pia.dto.Currency
 import cz.hartrik.pia.dto.User
-import cz.hartrik.pia.service.SessionUtils
+
 import cz.hartrik.pia.service.UserManager
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.access.AccessDeniedException
@@ -33,37 +33,33 @@ class IBPagesController {
 
     @RequestMapping("edit-user")
     String editUserHandler(Model model) {
-        ControllerUtils.fillLayoutAttributes(model)
-        model.addAttribute("default", SessionUtils.getUser())
+        def user = userManager.retrieveCurrentUser()
+        ControllerUtils.fillLayoutAttributes(model, user)
+        model.addAttribute("default", user)
         return "edit-user"
     }
 
     @Transactional
     @RequestMapping("accounts-overview")
     String accountsOverviewHandler(Model model) {
-        ControllerUtils.fillLayoutAttributes(model)
-
+        def user = userManager.retrieveCurrentUser()
+        ControllerUtils.fillLayoutAttributes(model, user)
         model.addAttribute('currencies', Currency.values()*.name())
-
-        def user = userManager.getUpdatedAndFullyLoadedUser()
         model.addAttribute('accounts', user.accounts)
-
         return "accounts-overview"
     }
 
     @Transactional
     @RequestMapping("account/{id}")
     String accountHandler(Model model, @PathVariable Integer id) {
-        ControllerUtils.fillLayoutAttributes(model)
-
+        def user = userManager.retrieveCurrentUser()
         def account = accountDao.findById(id)
                 .orElseThrow { new ObjectNotFoundException('Account not found') }
-        def user = SessionUtils.getUser()
-
         if (user.role != User.ROLE_ADMIN && account.owner.id != user.id) {
             throw new AccessDeniedException("Cannot show other user's account")
         }
 
+        ControllerUtils.fillLayoutAttributes(model, user)
         model.addAttribute('account', account)
         return "account"
     }
