@@ -4,14 +4,15 @@
 
 <#macro page_body>
 
-<h2>Accounts</h2>
 <#if accounts?has_content>
+<h2>Accounts</h2>
 <table class="table">
   <thead>
   <tr>
     <th scope="col">Account Number</th>
     <th scope="col">Card Number</th>
     <th scope="col">Balance</th>
+    <th scope="col"></th>
   </tr>
   </thead>
   <tbody>
@@ -20,14 +21,13 @@
     <td>${account.accountNumberFull}</td>
     <td>${account.cardNumber}</td>
     <td>${account.balance} ${account.currency}</td>
+    <td>
+      <a href="/ib/account/${account.id}" class="btn btn-primary btn-xs">Show</a>
+    </td>
   </tr>
   </#list>
   </tbody>
 </table>
-<#else>
-<div class="alert alert-primary" role="alert">
-  No accounts.
-</div>
 </#if>
 
 <h2>Create Account</h2>
