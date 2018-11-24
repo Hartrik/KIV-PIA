@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
 
 import javax.transaction.Transactional
 
@@ -25,6 +26,9 @@ import javax.transaction.Transactional
 @Controller
 @RequestMapping("/ib")
 class IBPagesController {
+
+    private static def DEFAULT_PAGINATION = 50
+    private static def PAGINATION_VALUES = [25, 50, 100, 200]
 
     @Autowired
     private UserManager userManager
@@ -55,7 +59,10 @@ class IBPagesController {
 
     @Transactional
     @RequestMapping("account/{id}")
-    String accountHandler(Model model, @PathVariable Integer id) {
+    String accountHandler(Model model, @PathVariable Integer id,
+            @RequestParam(required = false) Integer page,
+            @RequestParam(required = false) Integer count) {
+
         def user = userManager.retrieveCurrentUser()
         def account = accountDao.findById(id)
                 .orElseThrow { new ObjectNotFoundException('Account not found') }
@@ -65,7 +72,24 @@ class IBPagesController {
 
         ControllerUtils.fillLayoutAttributes(model, user)
         model.addAttribute('account', account)
-        model.addAttribute('transactions', transactionDao.findAllByAccount(account))
+
+        def transactions = transactionDao.findAllByAccount(account)
+        count = (!count || count < 1) ? DEFAULT_PAGINATION : count
+        page = (!page || page < 0) ? 0 : page
+        int pages = (transactions.size() + count - 1) / count
+        if (page >= pages) page = pages - 1
+        def transactionsView = transactions.subList(
+                Math.min(page * count, transactions.size()),
+                Math.min((page + 1) * count, transactions.size())
+        )
+        model.addAttribute('transactions', transactionsView)
+
+        def pageUrls = (0..<pages).collect { "/ib/account/${id}?page=$it&count=$count" }
+        model.addAttribute('pagination_pages', pageUrls)
+        model.addAttribute('pagination_current_page', pageUrls[page])
+        def countUrls = PAGINATION_VALUES.collect { [it, "/ib/account/${id}?page=0&count=$it"] }
+        model.addAttribute('pagination_count', countUrls)
+        model.addAttribute('pagination_current_count', countUrls[PAGINATION_VALUES.indexOf(count)])
         return "account"
     }
 

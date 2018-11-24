@@ -12,7 +12,7 @@
   <dd class="col-sm-9">${account.cardNumber}</dd>
 
   <dt class="col-sm-3">Balance</dt>
-  <dd class="col-sm-9">${account.balance} ${account.currency}</dd>
+  <dd class="col-sm-9">${account.balance?string["###,###,##0.00"]} ${account.currency}</dd>
 </dl>
 
 <div class="table-responsive">
@@ -32,9 +32,9 @@
         <td>${transaction.dateAsIso8601}</td>
         <td>
           <#if transaction.senderAccountNumber == account.accountNumberFull>
-          <span class="amount-dec">${transaction.amountSent}</span>
+          <span class="amount-dec">${transaction.amountSent?string["###,###,##0.00"]}</span>
           <#else>
-          <span class="amount-inc">${transaction.amountReceived}</span>
+          <span class="amount-inc">${transaction.amountReceived?string["###,###,##0.00"]}</span>
           </#if>
         </td>
         <td>
@@ -50,6 +50,9 @@
       </#list>
     </tbody>
   </table>
+</div>
+<div>
+  <#include "part/pagination.ftl">
 </div>
 
 </#macro>
