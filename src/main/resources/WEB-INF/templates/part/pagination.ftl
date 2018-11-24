@@ -1,7 +1,7 @@
 <nav>
   <ul class="pagination">
     <#list pagination_count as index_and_page>
-      <#if !pagination_current_count?? && index_and_page[0] == pagination_current_count[0]>
+      <#if pagination_current_count?? && index_and_page[0] == pagination_current_count[0]>
         <li class="page-item active">
       <span class="page-link">
         ${(index_and_page[0])}
