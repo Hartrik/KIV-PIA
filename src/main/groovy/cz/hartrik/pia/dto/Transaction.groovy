@@ -5,10 +5,11 @@ import groovy.transform.ToString
 
 import javax.persistence.*
 import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
 
 /**
  *
- * @version 2018-11-20
+ * @version 2018-11-24
  * @author Patrik Harag
  */
 @EqualsAndHashCode
@@ -16,6 +17,9 @@ import java.time.ZonedDateTime
 @Entity
 @Table(name = 'table_statement')
 class Transaction implements DataTransferObject<Integer> {
+
+    private static def ISO_8601_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -30,23 +34,41 @@ class Transaction implements DataTransferObject<Integer> {
     /**
      * The amount received in receiver's currency.
      */
+    @Column(nullable = false)
     BigDecimal amountReceived
 
     /**
-     * Sender's account.
+     * Sender's account reference (only for local accounts).
      */
     @ManyToOne
     Account sender
 
     /**
-     * Receiver's account.
+     * Sender's account number.
+     */
+    @Column(nullable = false)
+    String senderAccountNumber
+
+    /**
+     * Receiver's account reference (only for local accounts).
      */
     @ManyToOne
     Account receiver
 
+    /**
+     * Receiver's account number.
+     */
+    @Column(nullable = false)
+    String receiverAccountNumber
+
     @Basic
     @Column(nullable = false)
     ZonedDateTime date
+
+    @Transient
+    String getDateAsIso8601() {
+        date.format(ISO_8601_FORMATTER)
+    }
 
     String description
 

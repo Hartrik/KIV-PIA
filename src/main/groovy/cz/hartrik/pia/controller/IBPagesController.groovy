@@ -2,6 +2,7 @@ package cz.hartrik.pia.controller
 
 import cz.hartrik.pia.ObjectNotFoundException
 import cz.hartrik.pia.dao.AccountDao
+import cz.hartrik.pia.dao.TransactionDao
 import cz.hartrik.pia.dto.Currency
 import cz.hartrik.pia.dto.User
 
@@ -18,7 +19,7 @@ import javax.transaction.Transactional
 /**
  * Internet banking pages controller.
  *
- * @version 2018-11-23
+ * @version 2018-11-24
  * @author Patrik Harag
  */
 @Controller
@@ -30,6 +31,9 @@ class IBPagesController {
 
     @Autowired
     private AccountDao accountDao
+
+    @Autowired
+    private TransactionDao transactionDao
 
     @RequestMapping("edit-user")
     String editUserHandler(Model model) {
@@ -61,6 +65,7 @@ class IBPagesController {
 
         ControllerUtils.fillLayoutAttributes(model, user)
         model.addAttribute('account', account)
+        model.addAttribute('transactions', transactionDao.findAllByAccount(account))
         return "account"
     }
 

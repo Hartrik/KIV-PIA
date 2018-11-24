@@ -1,17 +1,21 @@
 package cz.hartrik.pia.service
 
+import cz.hartrik.pia.WrongInputException
 import cz.hartrik.pia.dao.AccountDao
+import cz.hartrik.pia.dao.TransactionDao
 import cz.hartrik.pia.dto.Account
 import cz.hartrik.pia.dto.Currency
+import cz.hartrik.pia.dto.Transaction
 import cz.hartrik.pia.dto.User
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
 import javax.transaction.Transactional
+import java.time.ZonedDateTime
 
 /**
  *
- * @version 2018-11-22
+ * @version 2018-11-24
  * @author Patrik Harag
  */
 @Transactional
@@ -21,9 +25,12 @@ class AccountManagerImpl implements AccountManager {
     @Autowired
     AccountDao accountDao
 
+    @Autowired
+    TransactionDao transactionDao
+
     @Override
     Account createAccount(Currency currency, User user) {
-        final def dummyNumber = "0"
+        final def dummyNumber = '0'
 
         def account = new Account(owner: user, currency: currency, balance: BigDecimal.ZERO,
                 accountNumber: dummyNumber, cardNumber: dummyNumber)
@@ -34,6 +41,97 @@ class AccountManagerImpl implements AccountManager {
         account.cardNumber = String.format('1282560512%06d', account.id)
 
         return accountDao.save(account)
+    }
+
+    @Override
+    Transaction performTransaction(Account sender, Account receiver, BigDecimal amount,
+                                   ZonedDateTime date, String description) {
+
+        def transaction = new Transaction(
+                date: date,
+                description: description,
+                sender: sender,
+                senderAccountNumber: sender.getAccountNumberFull(),
+                amountSent: amount,
+                receiver: receiver,
+                receiverAccountNumber: receiver.getAccountNumberFull(),
+                amountReceived: amount // TODO: conversion
+        )
+
+        validate(transaction)
+        return perform(transaction, sender, receiver)
+    }
+
+    @Override
+    Transaction performTransaction(String sender, Account receiver, BigDecimal amount,
+                                   ZonedDateTime date, String description) {
+
+        def transaction = new Transaction(
+                date: date,
+                description: description,
+                sender: null,
+                senderAccountNumber: sender,
+                amountSent: amount,
+                receiver: receiver,
+                receiverAccountNumber: receiver.getAccountNumberFull(),
+                amountReceived: amount
+        )
+
+        validate(transaction)
+        return perform(transaction, null, receiver)
+    }
+
+    @Override
+    Transaction performTransaction(Account sender, String receiver, BigDecimal amount,
+                                   ZonedDateTime date, String description) {
+
+        def transaction = new Transaction(
+                date: date,
+                description: description,
+                sender: sender,
+                senderAccountNumber: sender.getAccountNumberFull(),
+                amountSent: amount,
+                receiver: null,
+                receiverAccountNumber: receiver,
+                amountReceived: amount
+        )
+
+        validate(transaction)
+        return perform(transaction, sender, null)
+    }
+
+    private void validate(Transaction transaction) {
+        if (transaction.sender == null && transaction.receiver == null)
+            throw new WrongInputException('Both sender and receiver cannot be null')
+
+        if (transaction.sender == transaction.receiver)
+            throw new WrongInputException('Sender and receiver cannot be one person')
+
+        if (transaction.amountReceived == 0 || transaction.amountSent == 0)
+            throw new WrongInputException('Amount cannot be zero')
+
+        if (transaction.amountReceived < 0 || transaction.amountSent < 0)
+            throw new WrongInputException('Amount cannot be negative')
+
+        if (transaction.sender && transaction.sender.balance < transaction.amountSent)
+            throw new WrongInputException('Sender does not have enough money')
+    }
+
+    private Transaction perform(Transaction transaction, Account sender, Account receiver) {
+        // save transaction
+        transaction = transactionDao.save(transaction)
+
+        // update accounts balance
+        if (sender) {
+            sender.balance -= transaction.amountSent
+            accountDao.save(sender)
+        }
+        if (receiver) {
+            receiver.balance += transaction.amountReceived
+            accountDao.save(receiver)
+        }
+
+        return transaction
     }
 
 }

@@ -8,11 +8,11 @@ import javax.persistence.*
 
 /**
  *
- * @version 2018-11-22
+ * @version 2018-11-24
  * @author Patrik Harag
  */
-@EqualsAndHashCode(excludes = ['owner', 'outcomingStatements', 'incomingStatements'])
-@ToString(excludes = ['owner', 'outcomingStatements', 'incomingStatements'])
+@EqualsAndHashCode(excludes = ['owner'])
+@ToString(excludes = ['owner'])
 @Entity
 @Table(name = 'table_account')
 class Account implements DataTransferObject<Integer> {
@@ -37,11 +37,6 @@ class Account implements DataTransferObject<Integer> {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 3)
     Currency currency
-
-    @OneToMany(mappedBy = "sender")
-    Set<Transaction> outcomingStatements
-    @OneToMany(mappedBy = "receiver")
-    Set<Transaction> incomingStatements
 
     @Transient
     String getAccountNumberFull() {

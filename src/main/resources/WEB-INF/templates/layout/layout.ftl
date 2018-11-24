@@ -1,3 +1,5 @@
+<#setting number_format="###,###,##0.00">
+<#setting locale="en_US">
 <#macro page_body></#macro>
 
 <#macro display_page>

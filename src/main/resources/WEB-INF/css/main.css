@@ -36,3 +36,24 @@ footer p {
     padding-top: 10px;
     padding-bottom: 10px;
 }
+
+
+/* ACCOUNT */
+
+.amount-inc {
+    color: green;
+    font-weight: bold;
+}
+
+.amount-inc::before {
+    content: "+ ";
+}
+
+.amount-dec {
+    color: darkred;
+    font-weight: bold;
+}
+
+.amount-dec::before {
+    content: "- ";
+}
