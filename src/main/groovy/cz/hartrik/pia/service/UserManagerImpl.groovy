@@ -13,7 +13,7 @@ import java.util.function.Supplier
 
 /**
  *
- * @version 2018-11-23
+ * @version 2018-11-25
  * @author Patrik Harag
  */
 @Transactional
@@ -30,7 +30,8 @@ class UserManagerImpl implements UserManager {
     @Override
     void remove(Integer id) {
         def user = userDao.findById(id).orElseThrow(USER_NOT_FOUND)
-        userDao.delete(user)
+        user.enabled = false
+        userDao.save(user)
     }
 
     @Override

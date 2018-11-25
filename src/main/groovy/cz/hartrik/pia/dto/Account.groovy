@@ -8,7 +8,7 @@ import javax.persistence.*
 
 /**
  *
- * @version 2018-11-24
+ * @version 2018-11-25
  * @author Patrik Harag
  */
 @EqualsAndHashCode(excludes = ['owner'])
@@ -26,7 +26,7 @@ class Account implements DataTransferObject<Integer> {
     BigDecimal balance
 
     @ManyToOne
-    @JoinColumn
+    @JoinColumn(nullable = false)
     User owner
 
     @Column(nullable = false, unique = true)

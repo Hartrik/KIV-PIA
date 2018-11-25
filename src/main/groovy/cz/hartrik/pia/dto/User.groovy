@@ -10,7 +10,7 @@ import javax.persistence.*
 
 /**
  *
- * @version 2018-11-22
+ * @version 2018-11-25
  * @author Patrik Harag
  */
 @EqualsAndHashCode(excludes = 'accounts')
@@ -29,7 +29,10 @@ class User implements UserDetails, DataTransferObject<Integer> {
     Integer id
 
     @Column(nullable = false)
-    String role = ROLE_CUSTOMER
+    Boolean enabled = true
+
+    @Column(nullable = false)
+    String role
 
     @Column(nullable = false)
     String firstName
@@ -89,7 +92,7 @@ class User implements UserDetails, DataTransferObject<Integer> {
     @Override
     @Transient
     boolean isEnabled() {
-        return true
+        return enabled
     }
 
 }

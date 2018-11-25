@@ -29,8 +29,10 @@ class ServicePagesController {
         def user = userManager.retrieveCurrentUser()
         ControllerUtils.fillLayoutAttributes(model, user)
         def listOfUsers = userDao.findAll()
-        model.addAttribute("users", listOfUsers.findAll { it.role == User.ROLE_CUSTOMER })
-        model.addAttribute("admins", listOfUsers.findAll { it.role == User.ROLE_ADMIN })
+        model.addAttribute("users",
+                listOfUsers.findAll { it.enabled && it.role == User.ROLE_CUSTOMER })
+        model.addAttribute("admins",
+                listOfUsers.findAll { it.enabled && it.role == User.ROLE_ADMIN })
         return "user-management"
     }
 
