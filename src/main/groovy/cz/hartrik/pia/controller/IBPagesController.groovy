@@ -20,15 +20,15 @@ import javax.transaction.Transactional
 /**
  * Internet banking pages controller.
  *
- * @version 2018-11-24
+ * @version 2018-11-25
  * @author Patrik Harag
  */
 @Controller
 @RequestMapping("/ib")
 class IBPagesController {
 
-    private static def DEFAULT_PAGINATION = 50
     private static def PAGINATION_VALUES = [25, 50, 100, 200]
+    private static def DEFAULT_PAGINATION = PAGINATION_VALUES[0]
 
     @Autowired
     private UserManager userManager
