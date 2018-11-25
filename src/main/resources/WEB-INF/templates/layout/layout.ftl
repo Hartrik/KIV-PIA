@@ -2,6 +2,7 @@
 <#macro page_body></#macro>
 
 <#macro display_page>
+<#compress>
 <!DOCTYPE html>
 <html>
   <head>
@@ -86,4 +87,5 @@
 
   </body>
 </html>
+</#compress>
 </#macro>
