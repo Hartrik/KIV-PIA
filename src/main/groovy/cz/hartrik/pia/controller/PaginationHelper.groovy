@@ -21,7 +21,7 @@ class PaginationHelper<T> {
         count = (!count || count < 1) ? defaultPagination : count
         page = (!page || page < 0) ? 0 : page
         int pages = (items.size() + count - 1) / count
-        if (page >= pages) page = pages - 1
+        if (page >= pages && pages > 0) page = pages - 1
         def itemsView = items.subList(
                 Math.min(page * count, items.size()),
                 Math.min((page + 1) * count, items.size()))
