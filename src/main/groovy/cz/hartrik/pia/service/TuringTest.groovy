@@ -14,6 +14,6 @@ interface TuringTest extends Predicate<String> {
     String getQuestion()
 
     @Override
-    boolean test(String response);
+    boolean test(String response)
 
 }

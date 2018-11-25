@@ -24,6 +24,8 @@
   </div>
 </div>
 
+<#assign form_transaction_action="/ib/account/${account.id}/send/action"/>
+<#include "part/form-transaction.ftl">
 </#macro>
 
 <@display_page/>

@@ -40,7 +40,7 @@ interface AccountManager {
          *
          * @param sender sender
          * @param receiver receiver
-         * @param amount money in sender's currency, amount >= 0
+         * @param amount money in receiver's currency, amount >= 0
          * @param date date
          * @param description description or null
          * @return transaction

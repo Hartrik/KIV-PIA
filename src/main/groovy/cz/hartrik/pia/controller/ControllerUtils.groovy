@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServletRequest
 
 /**
  *
- * @version 2018-11-23
+ * @version 2018-11-25
  * @author Patrik Harag
  */
 class ControllerUtils {
@@ -19,6 +19,10 @@ class ControllerUtils {
     static String redirectBack(HttpServletRequest request) {
         String referer = request.getHeader("Referer")
         return "redirect:" + (referer != null ? referer : "/")
+    }
+
+    static String redirect(HttpServletRequest request, String page) {
+        return "redirect:" + page
     }
 
 }

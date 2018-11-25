@@ -6,6 +6,7 @@ import org.springframework.beans.TypeMismatchException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.validation.BindException;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -46,8 +47,9 @@ public class GlobalExceptionHandler {
             MethodArgumentNotValidException.class,
             HttpMessageNotReadableException.class,
             TypeMismatchException.class,
-            WrongInputException.class,
-            AccessDeniedException.class,
+            WrongInputException.class,  // custom
+            AccessDeniedException.class,  // custom
+            BindException.class,  // spring - request params validation
     })
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ModelAndView handle400(Exception ex)   {

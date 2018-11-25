@@ -2,18 +2,38 @@ package cz.hartrik.pia.service
 
 import org.springframework.stereotype.Service
 
+import java.util.function.Predicate
+
 /**
  *
- * @version 2018-11-20
+ * @version 2018-11-25
  * @author Patrik Harag
  */
 @Service
 interface TuringTestService {
 
-    void register(TuringTest test)
+    /**
+     * Registers test.
+     *
+     * @param question
+     * @param predicate
+     */
+    void register(String question, Predicate<String> predicate)
 
+    /**
+     * Returns random test.
+     *
+     * @return
+     */
     TuringTest randomTest()
 
-    TuringTest findTest(String id)
+    /**
+     * Tests answer.
+     *
+     * @param id
+     * @param answer
+     * @return true/false or null if test was not found
+     */
+    Boolean testAnswer(String id, String answer)
 
 }
