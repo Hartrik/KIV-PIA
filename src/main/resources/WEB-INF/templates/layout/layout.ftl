@@ -75,7 +75,7 @@
               <#list user.accounts as account>
               <a href="/ib/account/${account.id}" class="list-group-item nested-group-item">${account.accountNumberFull}</a>
               </#list>
-              <a href="/ib/edit-user" class="list-group-item">Contact Information</a>
+              <a href="/ib/settings" class="list-group-item">Settings</a>
               <a href="/logout" class="list-group-item list-group-item-warning">Log Out</a>
             </div>
           </div>

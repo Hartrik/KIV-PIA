@@ -47,12 +47,12 @@ class IBPagesController {
     @Autowired
     private AccountDao accountDao
 
-    @RequestMapping("edit-user")
+    @RequestMapping("settings")
     String editUserHandler(Model model) {
         def user = userManager.retrieveCurrentUser()
         ControllerUtils.fillLayoutAttributes(model, user)
         model.addAttribute("default", user)
-        return "edit-user"
+        return "settings"
     }
 
     @RequestMapping("accounts-overview")

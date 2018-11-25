@@ -43,7 +43,7 @@
     </div>
 
     <div class="form-row col-md-12">
-      <div class="form-group col-md-10">
+      <div class="form-group col-md-12">
         <label for="description">Note (optional)</label>
         <input id="description" name="description" type="text" class="form-control"
                maxlength="200"
@@ -54,7 +54,7 @@
     <input type="hidden" id="turingTestQuestionId" name="turingTestQuestionId" value="${turing_test.id}">
 
     <div class="form-row col-md-12">
-      <div class="form-group col-md-10">
+      <div class="form-group col-md-12">
         <label for="turingTestAnswer">Anti-Robot Test: ${turing_test.question}</label>
         <input id="turingTestAnswer" name="turingTestAnswer" type="text" class="form-control"
                required>
@@ -63,9 +63,8 @@
 
     <input type="hidden" id="sender" name="sender" value="${account.id}">
 
-    <div class="form-row">
-      <div class="form-group col-md-12">
-        <div class="col-md-4"></div>
+    <div class="form-row col-md-12">
+      <div class="form-group col-md-12 text-center">
         <button id="apply" class="btn btn-primary">Submit</button>
       </div>
     </div>

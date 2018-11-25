@@ -4,22 +4,27 @@
 
 <#macro page_body>
 
-<div class="row">
-  <div class="col-md-8">
-    <dl class="container">
-      <dt class="col-md-2">Account Number</dt>
-      <dd class="col-md-10">${account.accountNumberFull}</dd>
+<div class="panel panel-default">
+  <div class="panel-heading">Account Summary</div>
+  <div class="panel-body">
+    <div class="row">
+      <div class="col-md-8">
+        <dl class="container">
+          <dt class="col-md-2">Account Number</dt>
+          <dd class="col-md-10">${account.accountNumberFull}</dd>
 
-      <dt class="col-md-2">Card Number</dt>
-      <dd class="col-md-10">${account.cardNumber}</dd>
+          <dt class="col-md-2">Card Number</dt>
+          <dd class="col-md-10">${account.cardNumber}</dd>
 
-      <dt class="col-md-2">Balance</dt>
-      <dd class="col-md-10">${account.balance?string["###,###,##0.00"]} ${account.currency}</dd>
-    </dl>
-  </div>
-  <div class="col-md-4">
-    <div class="container send-button-container">
-      <a href="/ib/account/${account.id}/send" class="btn btn-primary btn-sm">Send Payment</a>
+          <dt class="col-md-2">Balance</dt>
+          <dd class="col-md-10">${account.balance?string["###,###,##0.00"]} ${account.currency}</dd>
+        </dl>
+      </div>
+      <div class="col-md-4">
+        <div class="container send-button-container">
+          <a href="/ib/account/${account.id}/send" class="btn btn-primary btn-sm">Send Payment</a>
+        </div>
+      </div>
     </div>
   </div>
 </div>
