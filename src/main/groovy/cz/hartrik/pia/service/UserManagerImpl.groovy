@@ -28,29 +28,50 @@ class UserManagerImpl implements UserManager {
     private UserDao userDao
 
     @Override
-    void remove(Integer id) {
-        def user = userDao.findById(id).orElseThrow(USER_NOT_FOUND)
-        user.enabled = false
-        userDao.save(user)
+    UserManager.AuthorizedUserManager authorize(User user) {
+        return new AuthorizedUserManagerImpl(user)
     }
 
-    @Override
-    void edit(Integer id, String firstName, String lastName, String personalNumber, String email) {
-        def user = userDao.findById(id).orElseThrow(USER_NOT_FOUND)
+    private class AuthorizedUserManagerImpl implements UserManager.AuthorizedUserManager {
 
-        def currentUser = retrieveCurrentUser()
-        if (user.id != currentUser.id && currentUser.role == User.ROLE_CUSTOMER) {
-            throw new AccessDeniedException("User cannot edit other user's account")
-        } else {
-            // we want to update a cached user as well
-            user = currentUser
+        private final User currentUser
+
+        AuthorizedUserManagerImpl(User currentUser) {
+            this.currentUser = currentUser
         }
 
-        user.firstName = firstName
-        user.lastName = lastName
-        user.personalNumber = personalNumber
-        user.email = email
-        userDao.save(user)
+        @Override
+        void remove(Integer id) {
+            if (currentUser.role != User.ROLE_ADMIN) {
+                throw new AccessDeniedException("Only admin can remove a user")
+            }
+
+            def user = userDao.findById(id).orElseThrow(USER_NOT_FOUND)
+            if (user.role == User.ROLE_ADMIN) {
+                throw new AccessDeniedException("Cannot remove admin's account")
+            }
+
+            user.enabled = false
+            userDao.save(user)
+        }
+
+        @Override
+        void edit(Integer id, String firstName, String lastName, String personalNumber, String email) {
+            def user = userDao.findById(id).orElseThrow(USER_NOT_FOUND)
+
+            if (user.id != currentUser.id && currentUser.role == User.ROLE_CUSTOMER) {
+                throw new AccessDeniedException("User cannot edit other user's account")
+            } else {
+                // we want to update a cached user as well
+                user = currentUser
+            }
+
+            user.firstName = firstName
+            user.lastName = lastName
+            user.personalNumber = personalNumber
+            user.email = email
+            userDao.save(user)
+        }
     }
 
     @Override

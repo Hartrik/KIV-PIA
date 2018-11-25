@@ -37,7 +37,8 @@ class IBActionsController {
             @RequestParam String personalNumber,
             @RequestParam String email) {
 
-        userManager.edit(id, firstName, lastName, personalNumber, email)
+        def user = userManager.retrieveCurrentUser()
+        userManager.authorize(user).edit(id, firstName, lastName, personalNumber, email)
 
         return ControllerUtils.redirectBack(request)
     }

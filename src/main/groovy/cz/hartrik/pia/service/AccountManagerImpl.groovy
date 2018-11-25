@@ -37,11 +37,11 @@ class AccountManagerImpl implements AccountManager {
 
     class AuthorizedAccountManagerImpl implements AccountManager.AuthorizedAccountManager {
 
+        private final User currentUser
+
         AuthorizedAccountManagerImpl(User currentUser) {
             this.currentUser = currentUser
         }
-
-        private final User currentUser
 
         @Override
         Account createAccount(Currency currency, User user) {

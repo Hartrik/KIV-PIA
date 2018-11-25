@@ -23,7 +23,8 @@ class ServiceActionsController {
 
     @RequestMapping('remove-user')
     String removeUserHandler(HttpServletRequest request, @RequestParam Integer id) {
-        userManager.remove(id)
+        def user = userManager.retrieveCurrentUser()
+        userManager.authorize(user).remove(id)
 
         return ControllerUtils.redirectBack(request)
     }
