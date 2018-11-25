@@ -4,16 +4,25 @@
 
 <#macro page_body>
 
-<dl class="row">
-  <dt class="col-sm-3">Account Number</dt>
-  <dd class="col-sm-9">${account.accountNumberFull}</dd>
+<div class="row">
+  <div class="col-md-8">
+    <dl class="container">
+      <dt class="col-md-2">Account Number</dt>
+      <dd class="col-md-10">${account.accountNumberFull}</dd>
 
-  <dt class="col-sm-3">Card Number</dt>
-  <dd class="col-sm-9">${account.cardNumber}</dd>
+      <dt class="col-md-2">Card Number</dt>
+      <dd class="col-md-10">${account.cardNumber}</dd>
 
-  <dt class="col-sm-3">Balance</dt>
-  <dd class="col-sm-9">${account.balance?string["###,###,##0.00"]} ${account.currency}</dd>
-</dl>
+      <dt class="col-md-2">Balance</dt>
+      <dd class="col-md-10">${account.balance?string["###,###,##0.00"]} ${account.currency}</dd>
+    </dl>
+  </div>
+  <div class="col-md-4">
+    <div class="container send-button-container">
+      <a href="/ib/account/${account.id}/send" class="btn btn-primary btn-sm">Send Payment</a>
+    </div>
+  </div>
+</div>
 
 <div class="table-responsive">
   <table class="table table-striped">

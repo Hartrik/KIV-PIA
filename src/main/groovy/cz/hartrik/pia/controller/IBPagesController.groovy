@@ -1,13 +1,10 @@
 package cz.hartrik.pia.controller
 
-import cz.hartrik.pia.ObjectNotFoundException
-import cz.hartrik.pia.dao.AccountDao
 import cz.hartrik.pia.dao.TransactionDao
 import cz.hartrik.pia.dto.Currency
-
+import cz.hartrik.pia.service.AccountManager
 import cz.hartrik.pia.service.UserManager
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.security.access.AccessDeniedException
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.PathVariable
@@ -30,7 +27,7 @@ class IBPagesController {
     private UserManager userManager
 
     @Autowired
-    private AccountDao accountDao
+    private AccountManager accountManager
 
     @Autowired
     private TransactionDao transactionDao
@@ -58,11 +55,7 @@ class IBPagesController {
             @RequestParam(required = false) Integer count) {
 
         def user = userManager.retrieveCurrentUser()
-        def account = accountDao.findById(id)
-                .orElseThrow { new ObjectNotFoundException('Account not found') }
-        if (account.owner.id != user.id) {
-            throw new AccessDeniedException("Cannot show other user's account")
-        }
+        def account = accountManager.authorize(user).retrieveAccount(id)
 
         ControllerUtils.fillLayoutAttributes(model, user)
         model.addAttribute('account', account)
@@ -72,6 +65,17 @@ class IBPagesController {
         model.addAttribute('transactions', transactionsView)
 
         return "account"
+    }
+
+    @RequestMapping("account/{id}/send")
+    String accountHandler(Model model, @PathVariable Integer id) {
+        def user = userManager.retrieveCurrentUser()
+        def account = accountManager.authorize(user).retrieveAccount(id)
+
+        ControllerUtils.fillLayoutAttributes(model, user)
+        model.addAttribute('account', account)
+
+        return "send-payment"
     }
 
 }

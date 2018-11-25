@@ -15,7 +15,7 @@ import java.time.ZonedDateTime
 
 /**
  *
- * @version 2018-11-24
+ * @version 2018-11-25
  * @author Patrik Harag
  */
 @Configuration
@@ -33,7 +33,7 @@ class DatabasePopulator {
     @PostConstruct
     @Transactional
     void populateDB() {
-        findOrCreate(new User(id: 1, firstName: 'Alan', lastName: 'Linger',
+        def admin = findOrCreate(new User(id: 1, firstName: 'Alan', lastName: 'Linger',
                 email: 'alan@example.com', personalNumber: '123456',
                 role: User.ROLE_ADMIN,
                 login: 'Admin001', password: encoder.encode('1234')))
@@ -49,24 +49,27 @@ class DatabasePopulator {
                 login: 'User0002', password: encoder.encode('0002')))
 
         if (!user1.accounts && !user2.accounts) {
-            def account1 = accountManager.createAccount(Currency.CZK, user1)
-            def account2 = accountManager.createAccount(Currency.CZK, user2)
+            def account1 = accountManager.authorize(user1).createAccount(Currency.CZK, user1)
+            def account2 = accountManager.authorize(user2).createAccount(Currency.CZK, user2)
 
             def random = new Random(42)
             def now = ZonedDateTime.now()
 
             def account1Created = now.minusMinutes(360 * 120)
-            accountManager.performTransaction(generateAccountNumber(random), account1,
+            accountManager.authorize(admin).performTransaction(generateAccountNumber(random), account1,
                     255000, account1Created, "Initial deposit")
 
             def account2Created = now.minusMinutes(720 * 5)
-            accountManager.performTransaction(generateAccountNumber(random), account2,
+            accountManager.authorize(admin).performTransaction(generateAccountNumber(random), account2,
                     128000, account2Created, "Initial deposit")
 
-            generateTransactions(account1, account1Created, 360, 120, 255000/5, random)
-            generateTransactions(account2, account2Created, 720, 5, 128000/5, random)
+            generateTransactions(accountManager.authorize(admin),
+                    account1, account1Created, 360, 120, 255000/5, random)
+            generateTransactions(accountManager.authorize(admin),
+                    account2, account2Created, 720, 5, 128000/5, random)
 
-            accountManager.performTransaction(account1, account2, 105.50, now, 'Subscription payment')
+            accountManager.authorize(user1)
+                    .performTransaction(account1, account2, 105.50, now, 'Subscription payment')
         }
     }
 
@@ -75,7 +78,9 @@ class DatabasePopulator {
         return user.orElseGet { userDao.save(newUser) }
     }
 
-    private void generateTransactions(Account account, ZonedDateTime start, double timeAlpha, int count, double amountAlpha, Random random) {
+    private void generateTransactions(accountManager, Account account, ZonedDateTime start,
+            double timeAlpha, int count, double amountAlpha, Random random) {
+
         ZonedDateTime currentTime = start
         for (int i = 0; i < count; i++) {
             currentTime = currentTime.plusMinutes((long) (Math.abs(random.nextGaussian() * timeAlpha)))

@@ -44,7 +44,8 @@ class IBActionsController {
 
     @RequestMapping(path = "create-account", method = RequestMethod.POST)
     String createAccountHandler(HttpServletRequest request, @RequestParam Currency currency) {
-        accountManager.createAccount(currency, userManager.retrieveCurrentUser())
+        def user = userManager.retrieveCurrentUser()
+        accountManager.authorize(user).createAccount(currency, user)
 
         return ControllerUtils.redirectBack(request)
     }
