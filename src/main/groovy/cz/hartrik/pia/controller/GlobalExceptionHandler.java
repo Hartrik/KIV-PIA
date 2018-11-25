@@ -5,6 +5,7 @@ import javax.servlet.ServletException;
 import org.springframework.beans.TypeMismatchException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -20,7 +21,7 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 /**
  * Contains global exception handlers.
  *
- * @version 2018-11-17
+ * @version 2018-11-25
  * @author Patrik Harag
  */
 @ControllerAdvice
@@ -46,6 +47,7 @@ public class GlobalExceptionHandler {
             HttpMessageNotReadableException.class,
             TypeMismatchException.class,
             WrongInputException.class,
+            AccessDeniedException.class,
     })
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ModelAndView handle400(Exception ex)   {
