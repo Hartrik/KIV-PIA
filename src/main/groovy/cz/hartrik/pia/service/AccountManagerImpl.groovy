@@ -31,11 +31,11 @@ class AccountManagerImpl implements AccountManager {
     TransactionDao transactionDao
 
     @Override
-    AccountManager.AuthorizedAccountManager authorize(User user) {
+    AuthorizedAccountManager authorize(User user) {
         new AuthorizedAccountManagerImpl(user)
     }
 
-    class AuthorizedAccountManagerImpl implements AccountManager.AuthorizedAccountManager {
+    class AuthorizedAccountManagerImpl implements AuthorizedAccountManager {
 
         private final User currentUser
 

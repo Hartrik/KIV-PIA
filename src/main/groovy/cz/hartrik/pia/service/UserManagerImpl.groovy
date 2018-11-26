@@ -28,11 +28,11 @@ class UserManagerImpl implements UserManager {
     private UserDao userDao
 
     @Override
-    UserManager.AuthorizedUserManager authorize(User user) {
+    AuthorizedUserManager authorize(User user) {
         return new AuthorizedUserManagerImpl(user)
     }
 
-    private class AuthorizedUserManagerImpl implements UserManager.AuthorizedUserManager {
+    private class AuthorizedUserManagerImpl implements AuthorizedUserManager {
 
         private final User currentUser
 
