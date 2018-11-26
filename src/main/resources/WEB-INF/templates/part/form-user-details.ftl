@@ -37,10 +37,6 @@
       </div>
     </div>
 
-    <#if default??>
-    <input type="hidden" id="id" name="id" value="${default.id}">
-    </#if>
-
     <div class="form-group">
       <label class="col-md-4 control-label" for="apply"></label>
       <div class="col-md-4">

@@ -38,7 +38,7 @@
 <div class="panel panel-default">
   <div class="panel-heading">Create Account</div>
   <div class="panel-body">
-    <#assign form_create_account_action="/ib/a/create-account"/>
+    <#assign form_create_account_action="/ib/create-account/action"/>
     <#include "part/form-create-account.ftl">
   </div>
 </div>

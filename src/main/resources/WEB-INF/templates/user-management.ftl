@@ -28,7 +28,7 @@
           </td>
           <td class="col-action">
             <a href="#" class="btn btn-danger btn-xs"
-               data-href="/service/a/remove-user?id=${u.id}"
+               data-href="/service/user/${u.id}/remove/action"
                data-toggle="modal" data-target="#dialog-confirm-delete">Remove</a>
           </td>
         </tr>

@@ -15,6 +15,7 @@ import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.bind.annotation.RequestParam
 
 import javax.servlet.http.HttpServletRequest
@@ -23,12 +24,12 @@ import java.time.ZonedDateTime
 /**
  * Internet banking pages controller.
  *
- * @version 2018-11-25
+ * @version 2018-11-26
  * @author Patrik Harag
  */
 @Controller
 @RequestMapping("/ib")
-class IBPagesController {
+class IBAccountsController {
 
     private final def pagination = new PaginationHelper([25, 50, 100, 200], 25)
 
@@ -47,14 +48,6 @@ class IBPagesController {
     @Autowired
     private AccountDao accountDao
 
-    @RequestMapping("settings")
-    String editUserHandler(Model model) {
-        def user = userManager.retrieveCurrentUser()
-        ControllerUtils.fillLayoutAttributes(model, user)
-        model.addAttribute("default", user)
-        return "settings"
-    }
-
     @RequestMapping("accounts-overview")
     String accountsOverviewHandler(Model model) {
         def user = userManager.retrieveCurrentUser()
@@ -62,6 +55,14 @@ class IBPagesController {
         model.addAttribute('currencies', Currency.values()*.name())
         model.addAttribute('accounts', user.accounts)
         return "accounts-overview"
+    }
+
+    @RequestMapping(path = "create-account/action", method = RequestMethod.POST)
+    String createAccountHandler(HttpServletRequest request, @RequestParam Currency currency) {
+        def user = userManager.retrieveCurrentUser()
+        accountManager.authorize(user).createAccount(currency, user)
+
+        return ControllerUtils.redirectBack(request)
     }
 
     @RequestMapping("account/{id}")
@@ -96,7 +97,7 @@ class IBPagesController {
         return "send-payment"
     }
 
-    @RequestMapping("account/{id}/send/action")
+    @RequestMapping(path = "account/{id}/send/action", method = RequestMethod.POST)
     String sendActionHandler(HttpServletRequest request,
             @PathVariable Integer id, TransactionDraft transactionDraft) {
 
