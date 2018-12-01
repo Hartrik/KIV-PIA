@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Configuration;
         "cz.hartrik.pia.config",
         "cz.hartrik.pia.controller",
         "cz.hartrik.pia.service",
-        "cz.hartrik.pia.dao",
+        "cz.hartrik.pia.model",
 })
 public class BaseConfig {
 

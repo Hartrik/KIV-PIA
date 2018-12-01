@@ -1,4 +1,4 @@
-package cz.hartrik.pia.dto
+package cz.hartrik.pia.model
 
 import cz.hartrik.pia.WrongInputException
 

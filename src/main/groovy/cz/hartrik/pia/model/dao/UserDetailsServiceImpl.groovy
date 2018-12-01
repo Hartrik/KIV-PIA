@@ -1,4 +1,4 @@
-package cz.hartrik.pia.dao
+package cz.hartrik.pia.model.dao
 
 import groovy.transform.PackageScope
 import org.springframework.beans.factory.annotation.Autowired

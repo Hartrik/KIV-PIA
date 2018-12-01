@@ -1,9 +1,9 @@
 package cz.hartrik.pia.config
 
-import cz.hartrik.pia.dao.UserDao
-import cz.hartrik.pia.dto.Account
-import cz.hartrik.pia.dto.Currency
-import cz.hartrik.pia.dto.User
+import cz.hartrik.pia.model.Account
+import cz.hartrik.pia.model.Currency
+import cz.hartrik.pia.model.User
+import cz.hartrik.pia.model.dao.UserDao
 import cz.hartrik.pia.service.AccountManager
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Configuration

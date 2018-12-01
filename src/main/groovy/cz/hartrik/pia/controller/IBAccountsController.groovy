@@ -3,10 +3,10 @@ package cz.hartrik.pia.controller
 import cz.hartrik.pia.JavaBank
 import cz.hartrik.pia.ObjectNotFoundException
 import cz.hartrik.pia.WrongInputException
-import cz.hartrik.pia.dao.AccountDao
-import cz.hartrik.pia.dao.TransactionDao
-import cz.hartrik.pia.dto.Currency
-import cz.hartrik.pia.dto.TransactionDraft
+import cz.hartrik.pia.model.Currency
+import cz.hartrik.pia.model.TransactionDraft
+import cz.hartrik.pia.model.dao.AccountDao
+import cz.hartrik.pia.model.dao.TransactionDao
 import cz.hartrik.pia.service.AccountManager
 import cz.hartrik.pia.service.TuringTestService
 import cz.hartrik.pia.service.UserManager

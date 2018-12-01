@@ -1,6 +1,6 @@
-package cz.hartrik.pia.dao
+package cz.hartrik.pia.model.dao
 
-import cz.hartrik.pia.dto.User
+import cz.hartrik.pia.model.User
 import org.springframework.data.jpa.repository.JpaRepository
 
 /**

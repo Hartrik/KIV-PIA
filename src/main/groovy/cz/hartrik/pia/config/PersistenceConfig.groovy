@@ -23,7 +23,7 @@ import javax.sql.DataSource
  */
 @Configuration
 @EnableTransactionManagement
-@EnableJpaRepositories('cz.hartrik.pia.dao')
+@EnableJpaRepositories('cz.hartrik.pia.model.dao')
 class PersistenceConfig {
 
     private static Properties initProperties(Dialect dialect) {
@@ -61,7 +61,7 @@ class PersistenceConfig {
         LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean()
         factory.setJpaVendorAdapter(vendorAdapter)
         factory.setJpaProperties(initProperties(dialect))
-        factory.setPackagesToScan('cz.hartrik.pia.dto')
+        factory.setPackagesToScan('cz.hartrik.pia.model')
         factory.setDataSource(dataSource)
         return factory
     }

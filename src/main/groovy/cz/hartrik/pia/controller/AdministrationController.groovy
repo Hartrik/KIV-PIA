@@ -1,7 +1,7 @@
 package cz.hartrik.pia.controller
 
-import cz.hartrik.pia.dao.UserDao
-import cz.hartrik.pia.dto.User
+import cz.hartrik.pia.model.User
+import cz.hartrik.pia.model.dao.UserDao
 import cz.hartrik.pia.service.UserManager
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Controller

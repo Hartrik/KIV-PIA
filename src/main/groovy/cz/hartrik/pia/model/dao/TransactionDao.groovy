@@ -1,7 +1,7 @@
-package cz.hartrik.pia.dao
+package cz.hartrik.pia.model.dao
 
-import cz.hartrik.pia.dto.Account
-import cz.hartrik.pia.dto.Transaction
+import cz.hartrik.pia.model.Account
+import cz.hartrik.pia.model.Transaction
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.query.Param

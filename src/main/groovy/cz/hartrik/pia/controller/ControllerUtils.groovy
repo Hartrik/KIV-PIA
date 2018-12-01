@@ -1,6 +1,6 @@
 package cz.hartrik.pia.controller
 
-import cz.hartrik.pia.dto.User
+import cz.hartrik.pia.model.User
 import org.springframework.ui.Model
 
 import javax.servlet.http.HttpServletRequest

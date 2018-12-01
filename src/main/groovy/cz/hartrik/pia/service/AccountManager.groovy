@@ -1,6 +1,6 @@
 package cz.hartrik.pia.service
 
-import cz.hartrik.pia.dto.User
+import cz.hartrik.pia.model.User
 
 /**
  *

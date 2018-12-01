@@ -2,12 +2,12 @@ package cz.hartrik.pia.service
 
 import cz.hartrik.pia.ObjectNotFoundException
 import cz.hartrik.pia.WrongInputException
-import cz.hartrik.pia.dao.AccountDao
-import cz.hartrik.pia.dao.TransactionDao
-import cz.hartrik.pia.dto.Account
-import cz.hartrik.pia.dto.Currency
-import cz.hartrik.pia.dto.Transaction
-import cz.hartrik.pia.dto.User
+import cz.hartrik.pia.model.Account
+import cz.hartrik.pia.model.Currency
+import cz.hartrik.pia.model.Transaction
+import cz.hartrik.pia.model.User
+import cz.hartrik.pia.model.dao.AccountDao
+import cz.hartrik.pia.model.dao.TransactionDao
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.access.AccessDeniedException
 import org.springframework.stereotype.Service

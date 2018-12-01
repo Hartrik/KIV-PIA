@@ -1,8 +1,8 @@
 package cz.hartrik.pia.service
 
 import cz.hartrik.pia.ObjectNotFoundException
-import cz.hartrik.pia.dao.UserDao
-import cz.hartrik.pia.dto.User
+import cz.hartrik.pia.model.User
+import cz.hartrik.pia.model.dao.UserDao
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.access.AccessDeniedException
 import org.springframework.security.core.context.SecurityContextHolder

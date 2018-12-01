@@ -1,9 +1,9 @@
 package cz.hartrik.pia.service
 
-import cz.hartrik.pia.dto.Account
-import cz.hartrik.pia.dto.Currency
-import cz.hartrik.pia.dto.Transaction
-import cz.hartrik.pia.dto.User
+import cz.hartrik.pia.model.Account
+import cz.hartrik.pia.model.Currency
+import cz.hartrik.pia.model.Transaction
+import cz.hartrik.pia.model.User
 
 import java.time.ZonedDateTime
 

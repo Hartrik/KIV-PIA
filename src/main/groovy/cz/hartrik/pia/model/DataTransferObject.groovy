@@ -1,4 +1,4 @@
-package cz.hartrik.pia.dto
+package cz.hartrik.pia.model
 
 /**
  * Base interface for all data transfer objects.
