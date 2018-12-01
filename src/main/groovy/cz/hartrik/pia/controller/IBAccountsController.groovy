@@ -24,7 +24,7 @@ import java.time.ZonedDateTime
 /**
  * Internet banking pages controller.
  *
- * @version 2018-11-26
+ * @version 2018-12-01
  * @author Patrik Harag
  */
 @Controller
@@ -60,7 +60,9 @@ class IBAccountsController {
     @RequestMapping(path = "create-account/action", method = RequestMethod.POST)
     String createAccountHandler(HttpServletRequest request, @RequestParam Currency currency) {
         def user = userManager.retrieveCurrentUser()
-        accountManager.authorize(user).createAccount(currency, user)
+        accountManager.authorize(user) {
+            createAccount(currency, user)
+        }
 
         return ControllerUtils.redirectBack(request)
     }
@@ -71,7 +73,9 @@ class IBAccountsController {
             @RequestParam(required = false) Integer count) {
 
         def user = userManager.retrieveCurrentUser()
-        def account = accountManager.authorize(user).retrieveAccount(id)
+        def account = accountManager.authorize(user) {
+            retrieveAccount(id)
+        }
 
         ControllerUtils.fillLayoutAttributes(model, user)
         model.addAttribute('account', account)
@@ -87,7 +91,9 @@ class IBAccountsController {
     @RequestMapping("account/{id}/send")
     String sendHandler(Model model, @PathVariable Integer id) {
         def user = userManager.retrieveCurrentUser()
-        def account = accountManager.authorize(user).retrieveAccount(id)
+        def account = accountManager.authorize(user) {
+            retrieveAccount(id)
+        }
 
         ControllerUtils.fillLayoutAttributes(model, user)
         model.addAttribute('account', account)
@@ -113,7 +119,9 @@ class IBAccountsController {
 
         def user = userManager.retrieveCurrentUser()
 
-        def account = accountManager.authorize(user).retrieveAccount(id)
+        def account = accountManager.authorize(user) {
+            retrieveAccount(id)
+        }
         def date = transactionDraft.parseDate()
         date = ZonedDateTime.now()  // TODO: odložené vykonání?
 
@@ -121,11 +129,15 @@ class IBAccountsController {
             def secondAccount = accountDao.findByAccountNumber(transactionDraft.accountNumber)
                     .orElseThrow { new ObjectNotFoundException("Account not found: ${transactionDraft.accountNumber}") }
 
-            accountManager.authorize(user).performTransaction(
+            accountManager.authorize(user) {
+                performTransaction(
                     account, secondAccount, transactionDraft.amount, date, transactionDraft.description)
+            }
         } else {
-            accountManager.authorize(user).performTransaction(
-                    account, transactionDraft.accountNumberFull, transactionDraft.amount, date, transactionDraft.description)
+            accountManager.authorize(user) {
+                performTransaction(
+                        account, transactionDraft.accountNumberFull, transactionDraft.amount, date, transactionDraft.description)
+            }
         }
 
         return ControllerUtils.redirect(request, "/ib/account/${id}")

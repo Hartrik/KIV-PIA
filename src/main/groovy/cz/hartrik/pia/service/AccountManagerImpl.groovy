@@ -17,7 +17,7 @@ import java.time.ZonedDateTime
 
 /**
  *
- * @version 2018-11-25
+ * @version 2018-12-01
  * @author Patrik Harag
  */
 @Transactional
@@ -31,11 +31,12 @@ class AccountManagerImpl implements AccountManager {
     TransactionDao transactionDao
 
     @Override
-    AuthorizedAccountManager authorize(User user) {
-        new AuthorizedAccountManagerImpl(user)
+    <T> T authorize(User user, @DelegatesTo(AuthorizedAccountManager) Closure<T> transaction) {
+        transaction.delegate = new AuthorizedAccountManagerImpl(user)
+        transaction()
     }
 
-    class AuthorizedAccountManagerImpl implements AuthorizedAccountManager {
+    private class AuthorizedAccountManagerImpl implements AuthorizedAccountManager {
 
         private final User currentUser
 

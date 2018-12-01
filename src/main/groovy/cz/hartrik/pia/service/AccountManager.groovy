@@ -4,11 +4,11 @@ import cz.hartrik.pia.model.User
 
 /**
  *
- * @version 2018-11-26
+ * @version 2018-12-01
  * @author Patrik Harag
  */
 interface AccountManager {
 
-    AuthorizedAccountManager authorize(User user)
+    def <T> T authorize(User user, @DelegatesTo(AuthorizedAccountManager) Closure<T> transaction);
 
 }
