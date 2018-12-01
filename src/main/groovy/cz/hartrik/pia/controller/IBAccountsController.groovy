@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.bind.annotation.RequestParam
 
 import javax.servlet.http.HttpServletRequest
+import java.time.LocalDate
 import java.time.ZonedDateTime
 
 /**
@@ -89,6 +90,7 @@ class IBAccountsController {
         model.addAttribute('account', account)
         model.addAttribute('currencies', Currency.values()*.name())
         model.addAttribute('turing_test', turingTestService.randomTest())
+        model.addAttribute('default', [date: LocalDate.now()])
 
         return "send-payment"
     }
