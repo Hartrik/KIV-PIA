@@ -1,12 +1,8 @@
 package cz.hartrik.pia.controller
 
-import cz.hartrik.pia.JavaBank
-import cz.hartrik.pia.ObjectNotFoundException
 import cz.hartrik.pia.WrongInputException
 import cz.hartrik.pia.model.Currency
 import cz.hartrik.pia.model.TransactionDraft
-import cz.hartrik.pia.model.dao.AccountDao
-import cz.hartrik.pia.model.dao.TransactionDao
 import cz.hartrik.pia.service.AccountManager
 import cz.hartrik.pia.service.TuringTestService
 import cz.hartrik.pia.service.UserManager
@@ -42,12 +38,6 @@ class IBAccountsController {
     @Autowired
     private TuringTestService turingTestService
 
-    @Autowired
-    private TransactionDao transactionDao
-
-    @Autowired
-    private AccountDao accountDao
-
     @RequestMapping("accounts-overview")
     String accountsOverviewHandler(Model model) {
         def user = userManager.retrieveCurrentUser()
@@ -80,7 +70,7 @@ class IBAccountsController {
         ControllerUtils.fillLayoutAttributes(model, user)
         model.addAttribute('account', account)
 
-        def transactions = transactionDao.findAllByAccount(account)
+        def transactions = accountManager.authorize(user) { findAllTransactionsByAccount(account) }
         def transactionsView = pagination.paginate(
                 model, "/ib/account/${id}", transactions, page, count)
         model.addAttribute('transactions', transactionsView)
@@ -115,29 +105,15 @@ class IBAccountsController {
             throw new WrongInputException("Incorrect anti-robot test answer")
         }
 
-        // TODO: něco přesunout do services?
-
         def user = userManager.retrieveCurrentUser()
+        def account = accountManager.authorize(user) { retrieveAccount(id) }
 
-        def account = accountManager.authorize(user) {
-            retrieveAccount(id)
-        }
         def date = transactionDraft.parseDate()
         date = ZonedDateTime.now()  // TODO: odložené vykonání?
 
-        if (transactionDraft.bankCode == JavaBank.CODE) {
-            def secondAccount = accountDao.findByAccountNumber(transactionDraft.accountNumber)
-                    .orElseThrow { new ObjectNotFoundException("Account not found: ${transactionDraft.accountNumber}") }
-
-            accountManager.authorize(user) {
-                performTransaction(
-                    account, secondAccount, transactionDraft.amount, date, transactionDraft.description)
-            }
-        } else {
-            accountManager.authorize(user) {
-                performTransaction(
-                        account, transactionDraft.accountNumberFull, transactionDraft.amount, date, transactionDraft.description)
-            }
+        accountManager.authorize(user) {
+            performTransaction(account, transactionDraft.accountNumberFull,
+                    transactionDraft.amount, date, transactionDraft.description)
         }
 
         return ControllerUtils.redirect(request, "/ib/account/${id}")

@@ -9,7 +9,7 @@ import java.time.ZonedDateTime
 
 /**
  *
- * @version 2018-11-26
+ * @version 2018-12-01
  * @author Patrik Harag
  */
 interface AuthorizedAccountManager {
@@ -30,6 +30,11 @@ interface AuthorizedAccountManager {
      * @return
      */
     Account retrieveAccount(int id)
+
+    List<Transaction> findAllTransactionsByAccount(Account account)
+
+    Transaction performTransaction(Account sender, String receiver, BigDecimal amount,
+                                   ZonedDateTime date, String description);
 
     /**
      * Creates a new transaction.
@@ -54,8 +59,8 @@ interface AuthorizedAccountManager {
      * @param description description or null
      * @return transaction
      */
-    Transaction performTransaction(String sender, Account receiver, BigDecimal amount,
-                                   ZonedDateTime date, String description)
+    Transaction performInterBankTransaction(String sender, Account receiver, BigDecimal amount,
+                                            ZonedDateTime date, String description)
 
     /**
      * Creates a new transaction.
@@ -67,7 +72,7 @@ interface AuthorizedAccountManager {
      * @param description description or null
      * @return transaction
      */
-    Transaction performTransaction(Account sender, String receiver, BigDecimal amount,
-                                   ZonedDateTime date, String description)
+    Transaction performInterBankTransaction(Account sender, String receiver, BigDecimal amount,
+                                            ZonedDateTime date, String description)
 
 }

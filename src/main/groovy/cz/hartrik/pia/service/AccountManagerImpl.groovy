@@ -1,5 +1,6 @@
 package cz.hartrik.pia.service
 
+import cz.hartrik.pia.JavaBank
 import cz.hartrik.pia.ObjectNotFoundException
 import cz.hartrik.pia.WrongInputException
 import cz.hartrik.pia.model.Account
@@ -79,6 +80,27 @@ class AccountManagerImpl implements AccountManager {
         }
 
         @Override
+        List<Transaction> findAllTransactionsByAccount(Account account) {
+            transactionDao.findAllByAccount(account)
+        }
+
+        @Override
+        Transaction performTransaction(Account sender, String receiver, BigDecimal amount,
+                                       ZonedDateTime date, String description) {
+
+            def (accountNumber, bankCode) = receiver.split("/")
+
+            if (bankCode == JavaBank.CODE) {
+                def receiverAccount = accountDao.findByAccountNumber(accountNumber)
+                        .orElseThrow { new ObjectNotFoundException("Account not found: ${accountNumber}") }
+
+                performTransaction(sender, receiverAccount, amount, date, description)
+            } else {
+                performInterBankTransaction(sender, receiver, amount, date, description)
+            }
+        }
+
+        @Override
         Transaction performTransaction(Account sender, Account receiver, BigDecimal amount,
                                        ZonedDateTime date, String description) {
 
@@ -98,8 +120,8 @@ class AccountManagerImpl implements AccountManager {
         }
 
         @Override
-        Transaction performTransaction(String sender, Account receiver, BigDecimal amount,
-                                       ZonedDateTime date, String description) {
+        Transaction performInterBankTransaction(String sender, Account receiver, BigDecimal amount,
+                                                ZonedDateTime date, String description) {
 
             def transaction = new Transaction(
                     date: date,
@@ -117,8 +139,8 @@ class AccountManagerImpl implements AccountManager {
         }
 
         @Override
-        Transaction performTransaction(Account sender, String receiver, BigDecimal amount,
-                                       ZonedDateTime date, String description) {
+        Transaction performInterBankTransaction(Account sender, String receiver, BigDecimal amount,
+                                                ZonedDateTime date, String description) {
 
             def transaction = new Transaction(
                     date: date,

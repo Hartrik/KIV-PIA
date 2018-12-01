@@ -65,11 +65,11 @@ class DatabasePopulator {
         def now = ZonedDateTime.now()
 
         def account1Created = now.minusMinutes(360 * 120)
-        accounts.performTransaction(generateAccountNumber(random), account1,
+        accounts.performInterBankTransaction(generateAccountNumber(random), account1,
                 255000, account1Created, "Initial deposit")
 
         def account2Created = now.minusMinutes(720 * 5)
-        accounts.performTransaction(generateAccountNumber(random), account2,
+        accounts.performInterBankTransaction(generateAccountNumber(random), account2,
                 128000, account2Created, "Initial deposit")
 
         generateTransactions(accounts, account1, account1Created, 360, 120, 255000 / 5, random)
@@ -92,9 +92,9 @@ class DatabasePopulator {
             def number = generateAccountNumber(random)
             double amount = BigDecimal.valueOf(Math.abs(random.nextGaussian()) * amountAlpha).round(2)
             if (random.nextBoolean()) {
-                accounts.performTransaction(number, account, amount, currentTime, null)
+                accounts.performInterBankTransaction(number, account, amount, currentTime, null)
             } else {
-                accounts.performTransaction(account, number, amount, currentTime, null)
+                accounts.performInterBankTransaction(account, number, amount, currentTime, null)
             }
         }
     }
