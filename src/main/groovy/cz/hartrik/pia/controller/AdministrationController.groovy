@@ -48,8 +48,7 @@ class AdministrationController {
 
     @RequestMapping('user/{id}/remove/action')
     String removeUserHandler(HttpServletRequest request, @PathVariable Integer id) {
-        def user = userManager.retrieveCurrentUser()
-        userManager.authorize(user).remove(id)
+        userManager.authorizeWithCurrentUser { remove(id) }
 
         return ControllerUtils.redirectBack(request)
     }

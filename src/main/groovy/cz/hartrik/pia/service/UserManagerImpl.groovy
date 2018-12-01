@@ -13,7 +13,7 @@ import java.util.function.Supplier
 
 /**
  *
- * @version 2018-11-25
+ * @version 2018-12-01
  * @author Patrik Harag
  */
 @Transactional
@@ -28,8 +28,15 @@ class UserManagerImpl implements UserManager {
     private UserDao userDao
 
     @Override
-    AuthorizedUserManager authorize(User user) {
-        return new AuthorizedUserManagerImpl(user)
+    <T> T authorize(User user, @DelegatesTo(AuthorizedUserManager) Closure<T> transaction) {
+        transaction.delegate = new AuthorizedUserManagerImpl(user)
+        transaction()
+    }
+
+    @Override
+    <T> T authorizeWithCurrentUser(@DelegatesTo(AuthorizedUserManager) Closure<T> transaction) {
+        transaction.delegate = new AuthorizedUserManagerImpl(retrieveCurrentUser())
+        transaction()
     }
 
     private class AuthorizedUserManagerImpl implements AuthorizedUserManager {

@@ -41,8 +41,9 @@ class IBSettingsController {
             @RequestParam String personalNumber,
             @RequestParam String email) {
 
-        def user = userManager.retrieveCurrentUser()
-        userManager.authorize(user).edit(id, firstName, lastName, personalNumber, email)
+        userManager.authorizeWithCurrentUser {
+            edit(id, firstName, lastName, personalNumber, email)
+        }
 
         return ControllerUtils.redirectBack(request)
     }
