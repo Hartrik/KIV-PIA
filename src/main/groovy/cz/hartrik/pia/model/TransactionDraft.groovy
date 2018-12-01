@@ -28,8 +28,6 @@ class TransactionDraft {
     String turingTestQuestionId
     String turingTestAnswer
 
-    Integer sender
-
     @Transient
     String getAccountNumberFull() {
         return accountNumber + "/" + bankCode

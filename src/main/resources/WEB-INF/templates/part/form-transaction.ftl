@@ -61,8 +61,6 @@
       </div>
     </div>
 
-    <input type="hidden" id="sender" name="sender" value="${account.id}">
-
     <div class="form-row col-md-12">
       <div class="form-group col-md-12 text-center">
         <button id="apply" class="btn btn-primary">Submit</button>
