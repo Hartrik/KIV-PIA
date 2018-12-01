@@ -1,7 +1,6 @@
 package cz.hartrik.pia.controller
 
 import cz.hartrik.pia.model.User
-import cz.hartrik.pia.model.dao.UserDao
 import cz.hartrik.pia.service.UserManager
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Controller
@@ -14,7 +13,7 @@ import javax.servlet.http.HttpServletRequest
 /**
  * Administration pages controller.
  *
- * @version 2018-11-26
+ * @version 2018-12-01
  * @author Patrik Harag
  */
 @Controller
@@ -24,18 +23,17 @@ class AdministrationController {
     @Autowired
     private UserManager userManager
 
-    @Autowired
-    private UserDao userDao
-
     @RequestMapping("user-management")
     String userManagementHandler(Model model) {
         def user = userManager.retrieveCurrentUser()
         ControllerUtils.fillLayoutAttributes(model, user)
-        def listOfUsers = userDao.findAll()
-        model.addAttribute("users",
-                listOfUsers.findAll { it.enabled && it.role == User.ROLE_CUSTOMER })
-        model.addAttribute("admins",
-                listOfUsers.findAll { it.enabled && it.role == User.ROLE_ADMIN })
+        userManager.authorize(user) {
+            def listOfUsers = findAllUsers()
+            model.addAttribute("users",
+                    listOfUsers.findAll { it.enabled && it.role == User.ROLE_CUSTOMER })
+            model.addAttribute("admins",
+                    listOfUsers.findAll { it.enabled && it.role == User.ROLE_ADMIN })
+        }
         return "user-management"
     }
 

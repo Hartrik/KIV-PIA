@@ -79,6 +79,11 @@ class UserManagerImpl implements UserManager {
             user.email = email
             userDao.save(user)
         }
+
+        @Override
+        List<User> findAllUsers() {
+            userDao.findAll()
+        }
     }
 
     @Override

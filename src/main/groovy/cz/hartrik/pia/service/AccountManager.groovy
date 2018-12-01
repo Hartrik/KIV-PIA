@@ -9,6 +9,6 @@ import cz.hartrik.pia.model.User
  */
 interface AccountManager {
 
-    def <T> T authorize(User user, @DelegatesTo(AuthorizedAccountManager) Closure<T> transaction);
+    def <T> T authorize(User user, @DelegatesTo(AuthorizedAccountManager) Closure<T> transaction)
 
 }
