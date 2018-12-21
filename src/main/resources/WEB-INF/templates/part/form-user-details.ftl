@@ -1,5 +1,6 @@
 <form class="form-horizontal" action="${form_user_details_action}" method="POST">
   <fieldset>
+    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 
     <div class="form-group">
       <label class="col-md-4 control-label" for="firstName">First name</label>

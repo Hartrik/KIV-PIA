@@ -11,7 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder
 
 /**
  * @author Patrik Harag
- * @version 2018-11-17
+ * @version 2018-12-21
  */
 @Configuration
 @EnableWebSecurity
@@ -25,7 +25,6 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                .csrf().disable()
                 .httpBasic().and()
                 .authorizeRequests()
                     .antMatchers("/service/**").hasAuthority(User.ROLE_ADMIN)

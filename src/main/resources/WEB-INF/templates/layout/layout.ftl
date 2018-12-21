@@ -53,6 +53,16 @@
         </div>
 
         <div class="col-md-3 sidebar">
+          <!-- Logout must be performed using POST because of CSRF protection -->
+          <form name='logout-form' action='/logout' method='post'>
+            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+          </form>
+          <script>
+            function logout(){
+              document.forms["logout-form"].submit();
+            }
+          </script>
+
           <#if !user??>
           <div class="well">
             <h4>Log In</h4>
@@ -64,7 +74,7 @@
             <div class="list-group">
               <a href="/service/user-management" class="list-group-item">User Management</a>
               <a href="/service/create-user" class="list-group-item nested-group-item">Create User</a>
-              <a href="/logout" class="list-group-item list-group-item-warning">Log Out</a>
+              <a href="javascript:logout()" class="list-group-item list-group-item-warning">Log Out</a>
             </div>
           </div>
           <#elseif user.role == 'CUSTOMER'>
@@ -76,7 +86,7 @@
               <a href="/ib/account/${account.id}" class="list-group-item nested-group-item">${account.accountNumberFull}</a>
               </#list>
               <a href="/ib/settings" class="list-group-item">Settings</a>
-              <a href="/logout" class="list-group-item list-group-item-warning">Log Out</a>
+              <a href="javascript:logout()" class="list-group-item list-group-item-warning">Log Out</a>
             </div>
           </div>
           </#if>

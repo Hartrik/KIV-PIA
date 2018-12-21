@@ -1,5 +1,6 @@
 <form class="form-vertical" action="${form_transaction_action}" method="POST" data-toggle="validator">
   <fieldset>
+    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 
     <div class="form-row col-md-12">
       <div class="form-group col-md-4">

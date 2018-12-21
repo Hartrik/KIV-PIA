@@ -1,5 +1,6 @@
 <form class="form-horizontal" action="${form_create_account_action}" method="POST">
   <fieldset>
+    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 
     <div class="form-group">
       <label class="col-md-4 control-label" for="currency">Currency</label>
