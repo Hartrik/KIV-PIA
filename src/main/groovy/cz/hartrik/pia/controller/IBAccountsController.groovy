@@ -4,6 +4,7 @@ import cz.hartrik.pia.WrongInputException
 import cz.hartrik.pia.model.Currency
 import cz.hartrik.pia.model.TransactionDraft
 import cz.hartrik.pia.service.AccountManager
+import cz.hartrik.pia.service.CurrencyConverter
 import cz.hartrik.pia.service.TuringTestService
 import cz.hartrik.pia.service.UserManager
 import org.springframework.beans.factory.annotation.Autowired
@@ -21,7 +22,7 @@ import java.time.ZonedDateTime
 /**
  * Internet banking pages controller.
  *
- * @version 2018-12-01
+ * @version 2018-12-21
  * @author Patrik Harag
  */
 @Controller
@@ -38,6 +39,9 @@ class IBAccountsController {
 
     @Autowired
     private TuringTestService turingTestService
+
+    @Autowired
+    private CurrencyConverter currencyConverter
 
     @RequestMapping("accounts-overview")
     String accountsOverviewHandler(Model model) {
@@ -109,13 +113,15 @@ class IBAccountsController {
 
         def user = userManager.retrieveCurrentUser()
         def account = accountManager.authorize(user) { retrieveAccount(id) }
+        def amount = currencyConverter.convert(
+                transactionDraft.amount, transactionDraft.currency, account.currency)
 
         def date = transactionDraft.parseDate()
         date = ZonedDateTime.now()  // TODO: odložené vykonání?
 
         accountManager.authorize(user) {
-            performTransaction(account, transactionDraft.accountNumberFull,
-                    transactionDraft.amount, date, transactionDraft.description)
+            performTransaction(account, transactionDraft.accountNumberFull, amount, date,
+                    transactionDraft.description)
         }
 
         return ControllerUtils.redirect(request, "/ib/account/${id}")

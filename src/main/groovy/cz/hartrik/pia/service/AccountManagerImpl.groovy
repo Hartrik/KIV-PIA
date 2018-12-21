@@ -18,7 +18,7 @@ import java.time.ZonedDateTime
 
 /**
  *
- * @version 2018-12-01
+ * @version 2018-12-21
  * @author Patrik Harag
  */
 @Transactional
@@ -30,6 +30,9 @@ class AccountManagerImpl implements AccountManager {
 
     @Autowired
     TransactionDao transactionDao
+
+    @Autowired
+    CurrencyConverter currencyConverter
 
     @Override
     <T> T authorize(User user, @DelegatesTo(AuthorizedAccountManager) Closure<T> transaction) {
@@ -112,7 +115,7 @@ class AccountManagerImpl implements AccountManager {
                     amountSent: amount,
                     receiver: receiver,
                     receiverAccountNumber: receiver.getAccountNumberFull(),
-                    amountReceived: amount // TODO: conversion
+                    amountReceived: currencyConverter.convert(amount, sender.currency, receiver.currency)
             )
 
             validate(transaction)
@@ -162,7 +165,7 @@ class AccountManagerImpl implements AccountManager {
                 throw new WrongInputException('Both sender and receiver cannot be null')
 
             if (transaction.sender == transaction.receiver)
-                throw new WrongInputException('Sender and receiver cannot be one person')
+                throw new WrongInputException('Sender and receiver cannot be the same account')
 
             if (transaction.amountReceived == 0 || transaction.amountSent == 0)
                 throw new WrongInputException('Amount cannot be zero')
