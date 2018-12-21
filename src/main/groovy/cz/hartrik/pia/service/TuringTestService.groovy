@@ -1,7 +1,5 @@
 package cz.hartrik.pia.service
 
-import org.springframework.stereotype.Service
-
 import java.util.function.Predicate
 
 /**
@@ -9,7 +7,6 @@ import java.util.function.Predicate
  * @version 2018-11-25
  * @author Patrik Harag
  */
-@Service
 interface TuringTestService {
 
     /**
