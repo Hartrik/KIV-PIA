@@ -57,17 +57,14 @@ class AccountManagerImpl implements AccountManager {
                 throw new AccessDeniedException("Cannot create account for other user")
             }
 
-            final def dummyNumber = '0'
-
-            def account = new Account(owner: user, currency: currency, balance: BigDecimal.ZERO,
-                    accountNumber: dummyNumber, cardNumber: dummyNumber)
-
-            account = accountDao.save(account)
-
-            account.accountNumber = String.format('6432%06d', account.id)
-            account.cardNumber = String.format('1282560512%06d', account.id)
-
-            return accountDao.save(account)
+            def number = accountDao.count() + 1
+            return accountDao.save(new Account(
+                    owner: user,
+                    currency: currency,
+                    balance: BigDecimal.ZERO,
+                    accountNumber: String.format('6432%06d', number),
+                    cardNumber: String.format('1282560512%06d', number)
+            ))
         }
 
         @Override
