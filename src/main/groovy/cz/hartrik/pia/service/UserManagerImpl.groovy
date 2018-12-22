@@ -109,7 +109,13 @@ class UserManagerImpl implements UserManager {
                     login: String.format("User%04d", userDao.count()),
                     password: encoder.encode(rawPassword)
             ))
-            notificationService.onUserCreated(user, rawPassword)
+
+            try {
+                notificationService.onUserCreated(user, rawPassword)
+            } catch (e) {
+                throw new RuntimeException(
+                        "User has been created but email notification failed for reason: $e", e)
+            }
         }
 
         @Override
