@@ -1,11 +1,14 @@
 package cz.hartrik.pia.config
 
+import cz.hartrik.pia.JavaBank
 import cz.hartrik.pia.model.Account
 import cz.hartrik.pia.model.Currency
 import cz.hartrik.pia.model.User
 import cz.hartrik.pia.model.dao.UserDao
 import cz.hartrik.pia.service.AccountManager
 import cz.hartrik.pia.service.AuthorizedAccountManager
+import cz.hartrik.pia.service.AuthorizedTemplateManager
+import cz.hartrik.pia.service.TemplateManager
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.crypto.password.PasswordEncoder
@@ -16,7 +19,7 @@ import java.time.ZonedDateTime
 
 /**
  *
- * @version 2018-12-01
+ * @version 2018-12-22
  * @author Patrik Harag
  */
 @Configuration
@@ -27,6 +30,9 @@ class DatabasePopulator {
 
     @Autowired
     AccountManager accountManager
+
+    @Autowired
+    TemplateManager templateManager
 
     @Autowired
     PasswordEncoder encoder
@@ -55,27 +61,33 @@ class DatabasePopulator {
             def account2 = accountManager.authorize(admin) { createAccount(Currency.CZK, user2) }
 
             accountManager.authorize(admin) {
-                generate(delegate, account1, account2)
+                generateTransactionsForAccounts(delegate, account1, account2)
+            }
+            templateManager.authorize(admin) {
+                generateTemplates(delegate, user1, account1, user2, account2)
             }
         }
     }
 
-    def generate(AuthorizedAccountManager accounts, Account account1, Account account2) {
+    def generateTransactionsForAccounts(AuthorizedAccountManager manager, Account account1, Account account2) {
         def random = new Random(42)
         def now = ZonedDateTime.now()
 
+        // initial deposits
         def account1Created = now.minusMinutes(360 * 120)
-        accounts.performInterBankTransaction(generateAccountNumber(random), account1,
+        manager.performInterBankTransaction(generateAccountNumber(random), account1,
                 255000, account1Created, "Initial deposit")
 
         def account2Created = now.minusMinutes(720 * 5)
-        accounts.performInterBankTransaction(generateAccountNumber(random), account2,
+        manager.performInterBankTransaction(generateAccountNumber(random), account2,
                 128000, account2Created, "Initial deposit")
 
-        generateTransactions(accounts, account1, account1Created, 360, 120, 255000 / 5, random)
-        generateTransactions(accounts, account2, account2Created, 720, 5, 128000 / 5, random)
+        // interbank transactions
+        generateTransactions(manager, account1, account1Created, 360, 120, 255000 / 5, random)
+        generateTransactions(manager, account2, account2Created, 720, 5, 128000 / 5, random)
 
-        accounts.performTransaction(account1, account2, 105.50, now, 'Subscription payment')
+        // transaction between these two accounts
+        manager.performTransaction(account1, account2, 105.50, now, 'Subscription payment')
     }
 
     private User findOrCreate(User newUser) {
@@ -83,7 +95,7 @@ class DatabasePopulator {
         return user.orElseGet { userDao.save(newUser) }
     }
 
-    private void generateTransactions(AuthorizedAccountManager accounts, Account account, ZonedDateTime start,
+    private void generateTransactions(AuthorizedAccountManager manager, Account account, ZonedDateTime start,
             double timeAlpha, int count, double amountAlpha, Random random) {
 
         ZonedDateTime currentTime = start
@@ -92,9 +104,9 @@ class DatabasePopulator {
             def number = generateAccountNumber(random)
             double amount = BigDecimal.valueOf(Math.abs(random.nextGaussian()) * amountAlpha).round(2)
             if (random.nextBoolean()) {
-                accounts.performInterBankTransaction(number, account, amount, currentTime, null)
+                manager.performInterBankTransaction(number, account, amount, currentTime, null)
             } else {
-                accounts.performInterBankTransaction(account, number, amount, currentTime, null)
+                manager.performInterBankTransaction(account, number, amount, currentTime, null)
             }
         }
     }
@@ -106,6 +118,16 @@ class DatabasePopulator {
 
     private String generateAccountNumber(Random random) {
         generateRandomNumber(random, 10) + '/' + generateRandomNumber(random, 4)
+    }
+
+    def generateTemplates(AuthorizedTemplateManager manager, User user1, Account account1, User user2, Account account2) {
+        manager.createTemplate(user1, "Send to ${user2.login}",
+                null, null, account2.accountNumber, JavaBank.CODE, 'Subscription payment')
+        manager.createTemplate(user2, "Send to ${user1.login}",
+                null, null, account1.accountNumber, JavaBank.CODE, 'Overpayment')
+
+        manager.createTemplate(user1, 'USD payment',
+                39, Currency.USD, '6765495974', '5472', 'Payment in USD')
     }
 
 }

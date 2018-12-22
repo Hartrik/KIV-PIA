@@ -15,7 +15,7 @@ import java.time.format.DateTimeFormatter
 @EqualsAndHashCode
 @ToString
 @Entity
-@Table(name = 'table_statement')
+@Table(name = 'table_transaction')
 class Transaction implements DataTransferObject<Integer> {
 
     private static def ISO_8601_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")

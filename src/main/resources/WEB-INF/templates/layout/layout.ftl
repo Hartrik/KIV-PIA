@@ -86,6 +86,7 @@
               <a href="/ib/account/${account.id}" class="list-group-item nested-group-item">${account.accountNumberFull}</a>
               </#list>
               <a href="/ib/settings" class="list-group-item">Settings</a>
+              <a href="/ib/templates-overview" class="list-group-item">Templates</a>
               <a href="javascript:logout()" class="list-group-item list-group-item-warning">Log Out</a>
             </div>
           </div>

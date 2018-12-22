@@ -5,6 +5,7 @@ import cz.hartrik.pia.model.Currency
 import cz.hartrik.pia.model.TransactionDraft
 import cz.hartrik.pia.service.AccountManager
 import cz.hartrik.pia.service.CurrencyConverter
+import cz.hartrik.pia.service.TemplateManager
 import cz.hartrik.pia.service.TuringTestService
 import cz.hartrik.pia.service.UserManager
 import org.springframework.beans.factory.annotation.Autowired
@@ -22,7 +23,7 @@ import java.time.ZonedDateTime
 /**
  * Internet banking pages controller.
  *
- * @version 2018-12-21
+ * @version 2018-12-22
  * @author Patrik Harag
  */
 @Controller
@@ -36,6 +37,9 @@ class IBAccountsController {
 
     @Autowired
     private AccountManager accountManager
+
+    @Autowired
+    private TemplateManager templateManager
 
     @Autowired
     private TuringTestService turingTestService
@@ -84,7 +88,7 @@ class IBAccountsController {
     }
 
     @RequestMapping("account/{id}/send")
-    String sendHandler(Model model, @PathVariable Integer id) {
+    String sendHandler(Model model, @PathVariable Integer id, @RequestParam(required = false) Integer template) {
         def user = userManager.retrieveCurrentUser()
         def account = accountManager.authorize(user) {
             retrieveAccount(id)
@@ -94,7 +98,17 @@ class IBAccountsController {
         model.addAttribute('account', account)
         model.addAttribute('currencies', Currency.values()*.name())
         model.addAttribute('turing_test', turingTestService.randomTest())
-        model.addAttribute('default', [date: LocalDate.now()])
+        if (template != null) {
+            def data = templateManager.authorize(user) {
+                findById(template)
+            }
+            model.addAttribute('default', data.properties + [date: LocalDate.now()])
+        } else {
+            model.addAttribute('default', [date: LocalDate.now()])
+        }
+        model.addAttribute('templates', templateManager.authorize(user) {
+            findAllTemplatesByOwner(user)
+        })
 
         return "send-payment"
     }

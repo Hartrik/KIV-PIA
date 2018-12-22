@@ -9,6 +9,7 @@ package cz.hartrik.pia.model
 interface DataTransferObject<PK extends Serializable> {
 
     /**
+     * Object id.
      *
      * @return  primary key of the instance
      */

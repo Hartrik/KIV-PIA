@@ -32,6 +32,22 @@
 <div class="panel panel-default">
   <div class="panel-heading">Send Payment</div>
   <div class="panel-body">
+    <#if templates??>
+    <div class="well" style="margin: 0px 30px 20px 30px">
+      <div class="dropdown">
+        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true">
+          From template...
+          <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+          <#list templates as template>
+            <li><a href="/ib/account/${account.id}/send?template=${template.id}">${template.name}</a></li>
+          </#list>
+        </ul>
+      </div>
+    </div>
+    </#if>
+
     <#assign form_transaction_action="/ib/account/${account.id}/send/action"/>
     <#include "part/form-transaction.ftl">
   </div>
