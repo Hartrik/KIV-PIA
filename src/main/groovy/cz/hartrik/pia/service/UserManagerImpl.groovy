@@ -1,11 +1,14 @@
 package cz.hartrik.pia.service
 
+import cz.hartrik.pia.JavaBank
 import cz.hartrik.pia.ObjectNotFoundException
+import cz.hartrik.pia.WrongInputException
 import cz.hartrik.pia.model.User
 import cz.hartrik.pia.model.dao.UserDao
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.access.AccessDeniedException
 import org.springframework.security.core.context.SecurityContextHolder
+import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 
 import javax.transaction.Transactional
@@ -13,7 +16,7 @@ import java.util.function.Supplier
 
 /**
  *
- * @version 2018-12-01
+ * @version 2018-12-22
  * @author Patrik Harag
  */
 @Transactional
@@ -26,6 +29,12 @@ class UserManagerImpl implements UserManager {
 
     @Autowired
     private UserDao userDao
+
+    @Autowired
+    private PasswordEncoder encoder
+
+    @Autowired
+    private UserNotificationService notificationService
 
     @Override
     <T> T authorize(User user, @DelegatesTo(AuthorizedUserManager) Closure<T> transaction) {
@@ -78,6 +87,29 @@ class UserManagerImpl implements UserManager {
             user.personalNumber = personalNumber
             user.email = email
             userDao.save(user)
+        }
+
+        @Override
+        void create(String firstName, String lastName, String personalNumber, String email) {
+            if (currentUser.role != User.ROLE_ADMIN) {
+                throw new AccessDeniedException("Users are not allowed to create new accounts")
+            }
+
+            if (!firstName || !lastName || !personalNumber || !email) {
+                throw new WrongInputException("Mandatory parameter not set!")
+            }
+
+            def rawPassword = JavaBank.generateRandomPassword(new Random())
+            def user = userDao.save(new User(
+                    role: User.ROLE_CUSTOMER,
+                    firstName: firstName,
+                    lastName: lastName,
+                    personalNumber: personalNumber,
+                    email: email,
+                    login: String.format("User%04d", userDao.count()),
+                    password: encoder.encode(rawPassword)
+            ))
+            notificationService.onUserCreated(user, rawPassword)
         }
 
         @Override

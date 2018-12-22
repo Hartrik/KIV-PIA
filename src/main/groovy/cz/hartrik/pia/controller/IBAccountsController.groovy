@@ -1,8 +1,7 @@
 package cz.hartrik.pia.controller
 
-import cz.hartrik.pia.WrongInputException
 import cz.hartrik.pia.model.Currency
-import cz.hartrik.pia.model.TransactionDraft
+import cz.hartrik.pia.controller.dto.TransactionDraft
 import cz.hartrik.pia.service.AccountManager
 import cz.hartrik.pia.service.CurrencyConverter
 import cz.hartrik.pia.service.TemplateManager
@@ -117,13 +116,7 @@ class IBAccountsController {
     String sendActionHandler(HttpServletRequest request,
             @PathVariable Integer id, TransactionDraft transactionDraft) {
 
-        def test = turingTestService.testAnswer(
-                transactionDraft.turingTestQuestionId, transactionDraft.turingTestAnswer)
-        if (test == null) {
-            throw new WrongInputException("Anti-robot test expired")
-        } else if (!test) {
-            throw new WrongInputException("Incorrect anti-robot test answer")
-        }
+        TuringTestHelper.testRequest(turingTestService, transactionDraft)
 
         def user = userManager.retrieveCurrentUser()
         def account = accountManager.authorize(user) { retrieveAccount(id) }

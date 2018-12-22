@@ -1,6 +1,9 @@
-package cz.hartrik.pia.model
+package cz.hartrik.pia.controller.dto
 
 import cz.hartrik.pia.WrongInputException
+import cz.hartrik.pia.model.Currency
+import groovy.transform.EqualsAndHashCode
+import groovy.transform.ToString
 
 import javax.persistence.Transient
 import java.time.LocalDate
@@ -10,9 +13,11 @@ import java.time.format.DateTimeFormatter
 
 /**
  *
- * @version 2018-11-25
+ * @version 2018-12-22
  * @author Patrik Harag
  */
+@EqualsAndHashCode
+@ToString
 class TransactionDraft {
 
     private static def ISO_8601_DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd")

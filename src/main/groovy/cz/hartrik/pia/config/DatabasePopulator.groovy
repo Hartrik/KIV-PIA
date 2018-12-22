@@ -75,11 +75,11 @@ class DatabasePopulator {
 
         // initial deposits
         def account1Created = now.minusMinutes(360 * 120)
-        manager.performInterBankTransaction(generateAccountNumber(random), account1,
+        manager.performInterBankTransaction(JavaBank.generateAccountNumber(random), account1,
                 255000, account1Created, "Initial deposit")
 
         def account2Created = now.minusMinutes(720 * 5)
-        manager.performInterBankTransaction(generateAccountNumber(random), account2,
+        manager.performInterBankTransaction(JavaBank.generateAccountNumber(random), account2,
                 128000, account2Created, "Initial deposit")
 
         // interbank transactions
@@ -101,7 +101,7 @@ class DatabasePopulator {
         ZonedDateTime currentTime = start
         for (int i = 0; i < count; i++) {
             currentTime = currentTime.plusMinutes((long) (Math.abs(random.nextGaussian() * timeAlpha)))
-            def number = generateAccountNumber(random)
+            def number = JavaBank.generateAccountNumber(random)
             double amount = BigDecimal.valueOf(Math.abs(random.nextGaussian()) * amountAlpha).round(2)
             if (random.nextBoolean()) {
                 manager.performInterBankTransaction(number, account, amount, currentTime, null)
@@ -109,15 +109,6 @@ class DatabasePopulator {
                 manager.performInterBankTransaction(account, number, amount, currentTime, null)
             }
         }
-    }
-
-    private String generateRandomNumber(Random random, int digits) {
-        def chars = '0123456789'.chars
-        return (0..<digits).collect { chars[random.nextInt(chars.size())] }.join('')
-    }
-
-    private String generateAccountNumber(Random random) {
-        generateRandomNumber(random, 10) + '/' + generateRandomNumber(random, 4)
     }
 
     def generateTemplates(AuthorizedTemplateManager manager, User user1, Account account1, User user2, Account account2) {

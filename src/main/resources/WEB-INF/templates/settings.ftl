@@ -8,7 +8,9 @@
   <div class="panel-body">
     <#assign form_user_details_action="/ib/settings/user/${user.id}/edit/action"/>
     <#include "part/form-user-details.ftl">
-    <p>Press Submit to save. All of the fields are mandatory.</p>
+    <div style="text-align:center">
+      <p>Press Submit to save. All of the fields are mandatory.</p>
+    </div>
   </div>
 </div>
 </#macro>
