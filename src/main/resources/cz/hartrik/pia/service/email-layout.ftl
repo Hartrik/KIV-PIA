@@ -8,6 +8,9 @@
   <head>
     <meta charset="UTF-8">
     <title>${page_title}</title>
+    <style>
+      <@page_style/>
+    </style>
   </head>
   <body>
     <div>

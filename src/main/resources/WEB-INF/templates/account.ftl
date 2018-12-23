@@ -3,12 +3,13 @@
 <#assign page_title="Account"/>
 
 <#macro page_body>
+<#include "part/dialog-account-statement.ftl">
 
 <div class="panel panel-default">
   <div class="panel-heading">Account Summary</div>
   <div class="panel-body">
     <div class="row">
-      <div class="col-md-8">
+      <div class="col-md-6">
         <dl class="container">
           <dt class="col-md-2">Account Number</dt>
           <dd class="col-md-10">${account.accountNumberFull}</dd>
@@ -20,9 +21,11 @@
           <dd class="col-md-10">${account.balance?string["###,###,##0.00"]} ${account.currency}</dd>
         </dl>
       </div>
-      <div class="col-md-4">
+      <div class="col-md-6">
         <div class="container send-button-container">
           <a href="/ib/account/${account.id}/send" class="btn btn-primary btn-sm">Send Payment</a>
+          <a href="#" class="btn btn-default btn-sm"
+             data-toggle="modal" data-target="#dialog-account-statement">Create account statement</a>
         </div>
       </div>
     </div>

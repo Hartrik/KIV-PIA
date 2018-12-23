@@ -1,5 +1,6 @@
 package cz.hartrik.pia.controller
 
+import cz.hartrik.pia.model.Account
 import cz.hartrik.pia.model.Currency
 import cz.hartrik.pia.controller.dto.TransactionDraft
 import cz.hartrik.pia.service.AccountManager
@@ -7,6 +8,7 @@ import cz.hartrik.pia.service.CurrencyConverter
 import cz.hartrik.pia.service.TemplateManager
 import cz.hartrik.pia.service.TuringTestService
 import cz.hartrik.pia.service.UserManager
+import cz.hartrik.pia.service.UserNotificationService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
@@ -22,7 +24,7 @@ import java.time.ZonedDateTime
 /**
  * Internet banking pages controller.
  *
- * @version 2018-12-22
+ * @version 2018-12-23
  * @author Patrik Harag
  */
 @Controller
@@ -45,6 +47,9 @@ class IBAccountsController {
 
     @Autowired
     private CurrencyConverter currencyConverter
+
+    @Autowired
+    private UserNotificationService notificationService
 
     @RequestMapping("accounts-overview")
     String accountsOverviewHandler(Model model) {
@@ -77,6 +82,12 @@ class IBAccountsController {
 
         ControllerUtils.fillLayoutAttributes(model, user)
         model.addAttribute('account', account)
+
+        // fill default form input values
+        model.addAttribute('default', [
+                statementFrom: LocalDate.now().minusMonths(1),
+                statementTo: LocalDate.now(),
+        ])
 
         def transactions = accountManager.authorize(user) { findAllTransactionsByAccount(account) }
         def transactionsView = pagination.paginate(
@@ -123,7 +134,7 @@ class IBAccountsController {
         def amount = currencyConverter.convert(
                 transactionDraft.amount, transactionDraft.currency, account.currency)
 
-        def date = transactionDraft.parseDate()
+        def date = ControllerUtils.parseDate(transactionDraft.date)
         date = ZonedDateTime.now()  // TODO: odložené vykonání?
 
         accountManager.authorize(user) {
@@ -134,4 +145,23 @@ class IBAccountsController {
         return ControllerUtils.redirect(request, "/ib/account/${id}")
     }
 
+    @RequestMapping(path = "account/{id}/create-statement/action", method = RequestMethod.POST)
+    String createStatementActionHandler(HttpServletRequest request, @PathVariable Integer id,
+            @RequestParam("date-from") String dateFromRaw, @RequestParam("date-to") String dateToRaw) {
+
+        def user = userManager.retrieveCurrentUser()
+
+        def dateFrom = ControllerUtils.parseDate(dateFromRaw)
+        def dateTo = ControllerUtils.parseDate(dateToRaw).plusDays(1).minusSeconds(1)
+
+        Account account = null
+        def transactions = accountManager.authorize(user) {
+            account = retrieveAccount(id)
+            findAllTransactionsByAccount(account, dateFrom, dateTo)
+        }
+
+        notificationService.sendStatement(user, account, transactions, dateFrom, dateTo)
+
+        return ControllerUtils.redirect(request, "/ib/account/${id}")
+    }
 }

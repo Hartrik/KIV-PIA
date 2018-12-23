@@ -5,6 +5,7 @@ import cz.hartrik.pia.model.Currency
 import cz.hartrik.pia.model.Transaction
 import cz.hartrik.pia.model.User
 
+import java.time.LocalDate
 import java.time.ZonedDateTime
 
 /**
@@ -32,6 +33,7 @@ interface AuthorizedAccountManager {
     Account retrieveAccount(int id)
 
     List<Transaction> findAllTransactionsByAccount(Account account)
+    List<Transaction> findAllTransactionsByAccount(Account account, ZonedDateTime from, ZonedDateTime to)
 
     Transaction performTransaction(Account sender, String receiver, BigDecimal amount,
                                    ZonedDateTime date, String description);

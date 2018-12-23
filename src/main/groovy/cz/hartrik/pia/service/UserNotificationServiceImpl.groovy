@@ -1,5 +1,7 @@
 package cz.hartrik.pia.service
 
+import cz.hartrik.pia.model.Account
+import cz.hartrik.pia.model.Transaction
 import cz.hartrik.pia.model.User
 import freemarker.template.Configuration
 import freemarker.template.Template
@@ -12,10 +14,11 @@ import org.springframework.web.servlet.view.freemarker.FreeMarkerConfig
 import javax.mail.*
 import javax.mail.internet.InternetAddress
 import javax.mail.internet.MimeMessage
+import java.time.ZonedDateTime
 
 /**
  *
- * @version 2018-12-22
+ * @version 2018-12-23
  * @author Patrik Harag
  */
 @Service
@@ -27,7 +30,7 @@ class UserNotificationServiceImpl implements UserNotificationService {
     private FreeMarkerConfig freeMarkerConfig
 
     @Override
-    void onUserCreated(User newUser, String rawPassword) {
+    void sendWelcome(User newUser, String rawPassword) {
         // for testing purposes
         LOGGER.info("User created: login=${newUser.login} password=${rawPassword}")
 
@@ -35,6 +38,21 @@ class UserNotificationServiceImpl implements UserNotificationService {
                 newUser.properties + [rawPassword: rawPassword])
 
         sendMail(newUser.email, "JavaBank - account created", message)
+    }
+
+    @Override
+    void sendStatement(User user, Account account, List<Transaction> transactions, ZonedDateTime from, ZonedDateTime to) {
+        def properties = user.properties + account.properties + [
+                transactions: transactions,
+                from: from,
+                to: to,
+                change: transactions.inject(BigDecimal.ZERO, {
+                    a, b -> a + (b.sender?.id == account.id ? -b.amountSent : b.amountReceived)
+                })
+        ]
+        def message = formatMessage("email-account-statement.ftl", properties)
+
+        sendMail(user.email, "JavaBank - account statement", message)
     }
 
     private void sendMail(String email, String subject, String htmlContent) {

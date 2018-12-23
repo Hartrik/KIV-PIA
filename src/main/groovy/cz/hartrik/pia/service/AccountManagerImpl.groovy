@@ -18,7 +18,7 @@ import java.time.ZonedDateTime
 
 /**
  *
- * @version 2018-12-21
+ * @version 2018-12-23
  * @author Patrik Harag
  */
 @Transactional
@@ -82,6 +82,11 @@ class AccountManagerImpl implements AccountManager {
         @Override
         List<Transaction> findAllTransactionsByAccount(Account account) {
             transactionDao.findAllByAccount(account)
+        }
+
+        @Override
+        List<Transaction> findAllTransactionsByAccount(Account account, ZonedDateTime from, ZonedDateTime to) {
+            transactionDao.findAllByAccount(account, from, to)
         }
 
         @Override

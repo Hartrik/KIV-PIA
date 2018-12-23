@@ -111,7 +111,7 @@ class UserManagerImpl implements UserManager {
             ))
 
             try {
-                notificationService.onUserCreated(user, rawPassword)
+                notificationService.sendWelcome(user, rawPassword)
             } catch (e) {
                 throw new RuntimeException(
                         "User has been created but email notification failed for reason: $e", e)

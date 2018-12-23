@@ -2,6 +2,9 @@
 
 <#assign page_title="Welcome to JavaBank"/>
 
+<#macro page_style>
+</#macro>
+
 <#macro page_body>
 <p>Hi ${firstName}! Let's get started with JavaBank!</p>
 
