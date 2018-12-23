@@ -19,11 +19,13 @@ import java.time.ZonedDateTime
 
 /**
  *
- * @version 2018-12-22
+ * @version 2018-12-23
  * @author Patrik Harag
  */
 @Configuration
 class DatabasePopulator {
+
+    public static final String ENABLE = "SAMPLE_DATA_GENERATION"
 
     @Autowired
     UserDao userDao
@@ -40,6 +42,10 @@ class DatabasePopulator {
     @PostConstruct
     @Transactional
     void populateDB() {
+        if (System.getenv(ENABLE) && !System.getenv(ENABLE).toBoolean()) {
+            return
+        }
+
         def admin = findOrCreate(new User(id: 1, firstName: 'Alan', lastName: 'Linger',
                 email: 'alan@example.com', personalNumber: '123456',
                 role: User.ROLE_ADMIN,
