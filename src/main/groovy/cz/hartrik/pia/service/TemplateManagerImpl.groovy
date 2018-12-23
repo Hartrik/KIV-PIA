@@ -11,6 +11,7 @@ import javax.transaction.Transactional
 import java.util.function.Supplier
 
 /**
+ * Template manager implementation.
  *
  * @version 2018-12-22
  * @author Patrik Harag
@@ -42,15 +43,18 @@ class TemplateManagerImpl implements TemplateManager {
         }
 
         @Override
-        TransactionTemplate createTemplate(User user, String name, BigDecimal amount,
-                    Currency currency, String accountNumber, String bankCode, String description) {
+        TransactionTemplate createTemplate(User owner, String name, BigDecimal amount,
+                                           Currency currency, String accountNumber, String bankCode, String description) {
 
-            if (currentUser.role != User.ROLE_ADMIN && user.id != currentUser.id) {
+            if (owner.role == User.ROLE_ADMIN) {
+                throw new AccessDeniedException("Admin cannot have an account")
+            }
+            if (currentUser.role != User.ROLE_ADMIN && owner.id != currentUser.id) {
                 throw new AccessDeniedException("Cannot create template owned by another user")
             }
 
             transactionTemplateDao.save(new TransactionTemplate(
-                    owner: user,
+                    owner: owner,
                     name: name,
                     amount: amount,
                     currency: currency,
