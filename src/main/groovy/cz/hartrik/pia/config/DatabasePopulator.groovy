@@ -29,7 +29,7 @@ class DatabasePopulator {
     public static final String ENABLE = "SAMPLE_DATA_GENERATION"
 
     @Autowired
-    private UserDao userDao
+    UserDao userDao
 
     @Autowired
     private AccountManager accountManager
