@@ -1,5 +1,6 @@
 package cz.hartrik.pia.controller
 
+import cz.hartrik.pia.WrongInputException
 import cz.hartrik.pia.model.Account
 import cz.hartrik.pia.model.Currency
 import cz.hartrik.pia.controller.dto.TransactionDraft
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.bind.annotation.RequestParam
+import org.springframework.web.servlet.mvc.support.RedirectAttributes
 
 import javax.servlet.http.HttpServletRequest
 import java.time.LocalDate
@@ -109,14 +111,16 @@ class IBAccountsController {
         model.addAttribute('account', account)
         model.addAttribute('currencies', Currency.values()*.name())
         model.addAttribute('turing_test', turingTestService.randomTest())
-        if (template != null) {
-            def data = templateManager.authorize(user) {
-                findById(template)
+
+        if (!model.containsAttribute('default')) {
+            if (template != null) {
+                def data = templateManager.authorize(user) { findById(template) }
+                model.addAttribute('default', data.properties + [date: LocalDate.now()])
+            } else {
+                model.addAttribute('default', [date: LocalDate.now()])
             }
-            model.addAttribute('default', data.properties + [date: LocalDate.now()])
-        } else {
-            model.addAttribute('default', [date: LocalDate.now()])
         }
+
         model.addAttribute('templates', templateManager.authorize(user) {
             findAllTemplatesByOwner(user)
         })
@@ -125,24 +129,28 @@ class IBAccountsController {
     }
 
     @RequestMapping(path = "account/{id}/send/action", method = RequestMethod.POST)
-    String sendActionHandler(HttpServletRequest request,
+    String sendActionHandler(HttpServletRequest request, RedirectAttributes redirectAttributes,
             @PathVariable Integer id, TransactionDraft transactionDraft) {
+        try {
+            TuringTestHelper.testRequest(turingTestService, transactionDraft)
 
-        TuringTestHelper.testRequest(turingTestService, transactionDraft)
+            def user = userManager.retrieveCurrentUser()
+            def account = accountManager.authorize(user) { findAccountById(id) }
+            def amount = currencyConverter.convert(
+                    transactionDraft.amount, transactionDraft.currency, account.currency)
 
-        def user = userManager.retrieveCurrentUser()
-        def account = accountManager.authorize(user) { findAccountById(id) }
-        def amount = currencyConverter.convert(
-                transactionDraft.amount, transactionDraft.currency, account.currency)
+            def date = ControllerUtils.parseDate(transactionDraft.date)
+            date = ZonedDateTime.now()  // TODO: odložené vykonání?
 
-        def date = ControllerUtils.parseDate(transactionDraft.date)
-        date = ZonedDateTime.now()  // TODO: odložené vykonání?
-
-        accountManager.authorize(user) {
-            performTransaction(account, transactionDraft.accountNumberFull, amount, date,
-                    transactionDraft.description)
+            accountManager.authorize(user) {
+                performTransaction(account, transactionDraft.accountNumberFull, amount, date,
+                        transactionDraft.description)
+            }
+        } catch (WrongInputException e) {
+            redirectAttributes.addFlashAttribute("default", transactionDraft)
+            redirectAttributes.addFlashAttribute("error", e)
+            return ControllerUtils.redirect(request, "/ib/account/${id}/send")
         }
-
         return ControllerUtils.redirect(request, "/ib/account/${id}")
     }
 

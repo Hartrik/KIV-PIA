@@ -1,5 +1,6 @@
 package cz.hartrik.pia.controller
 
+import cz.hartrik.pia.WrongInputException
 import cz.hartrik.pia.controller.dto.UserDraft
 import cz.hartrik.pia.model.User
 import cz.hartrik.pia.service.TuringTestService
@@ -10,13 +11,14 @@ import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestMethod
+import org.springframework.web.servlet.mvc.support.RedirectAttributes
 
 import javax.servlet.http.HttpServletRequest
 
 /**
  * Administration pages controller.
  *
- * @version 2018-12-22
+ * @version 2018-12-23
  * @author Patrik Harag
  */
 @Controller
@@ -52,11 +54,16 @@ class AdministrationController {
     }
 
     @RequestMapping(path = 'create-user/action', method = RequestMethod.POST)
-    String createUserHandler(HttpServletRequest request, UserDraft userDraft) {
-        TuringTestHelper.testRequest(turingTestService, userDraft)
-
-        userManager.authorizeWithCurrentUser {
-            create(userDraft.firstName, userDraft.lastName, userDraft.personalNumber, userDraft.email)
+    String createUserHandler(HttpServletRequest request, RedirectAttributes redirectAttributes, UserDraft userDraft) {
+        try {
+            TuringTestHelper.testRequest(turingTestService, userDraft)
+            userManager.authorizeWithCurrentUser {
+                create(userDraft.firstName, userDraft.lastName, userDraft.personalNumber, userDraft.email)
+            }
+        } catch (WrongInputException e) {
+            redirectAttributes.addFlashAttribute("default", userDraft)
+            redirectAttributes.addFlashAttribute("error", e)
+            return ControllerUtils.redirect(request, "/service/create-user")
         }
         return ControllerUtils.redirect(request, "/service/user-management")
     }
