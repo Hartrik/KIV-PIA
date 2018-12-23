@@ -22,7 +22,7 @@ class CurrencyConverterImpl implements CurrencyConverter {
         long timestamp
     }
 
-    private final Map<Currency, RateCache> rates = [:]
+    private final Map<String, RateCache> rates = [:]
 
     @Override
     synchronized BigDecimal convert(BigDecimal amount, Currency sourceCurrency, Currency targetCurrency) {
