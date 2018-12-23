@@ -3,10 +3,9 @@
 
 <#macro display_page>
 <#compress>
-<!DOCTYPE html>
 <html>
   <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8"/>
     <title>${page_title}</title>
     <style>
       <@page_style/>

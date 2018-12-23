@@ -26,15 +26,15 @@
 <#macro page_body>
 <h2>Account info</h2>
 <p>
-  <strong>Owner:</strong> ${firstName} ${lastName}<br>
-  <strong>Account:</strong> ${accountNumberFull}<br>
+  <strong>Owner:</strong> ${firstName} ${lastName}<br/>
+  <strong>Account:</strong> ${accountNumberFull}<br/>
   <strong>Current balance:</strong> ${balance} ${currency}
 </p>
 
 <h2>Transactions</h2>
 <p>
-  <strong>Interval:</strong> ${from} - ${to}<br>
-  <strong>Turnover:</strong> ${turnover}<br> ${currency}
+  <strong>Interval:</strong> ${from} - ${to}<br/>
+  <strong>Turnover:</strong> ${turnover} ${currency}<br/>
   <strong>Change:</strong> <span class="<#if change lt 0>amount-dec<#else>amount-inc</#if>">${change}</span> ${currency}
 </p>
 

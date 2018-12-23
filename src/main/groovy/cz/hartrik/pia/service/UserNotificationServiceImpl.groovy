@@ -10,10 +10,15 @@ import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import org.springframework.web.servlet.view.freemarker.FreeMarkerConfig
+import org.xhtmlrenderer.pdf.ITextRenderer
 
+import javax.activation.DataHandler
 import javax.mail.*
 import javax.mail.internet.InternetAddress
+import javax.mail.internet.MimeBodyPart
 import javax.mail.internet.MimeMessage
+import javax.mail.internet.MimeMultipart
+import javax.mail.util.ByteArrayDataSource
 import java.time.ZonedDateTime
 
 /**
@@ -37,7 +42,7 @@ class UserNotificationServiceImpl implements UserNotificationService {
         def message = formatMessage("email-welcome.ftl",
                 newUser.properties + [rawPassword: rawPassword])
 
-        sendMail(newUser.email, "JavaBank - account created", message)
+        sendMail(newUser.email, "JavaBank - account created", message, null)
     }
 
     @Override
@@ -55,10 +60,10 @@ class UserNotificationServiceImpl implements UserNotificationService {
         ]
         def message = formatMessage("email-account-statement.ftl", properties)
 
-        sendMail(user.email, "JavaBank - account statement", message)
+        sendMail(user.email, "JavaBank - account statement", message, "statement.pdf")
     }
 
-    private void sendMail(String email, String subject, String htmlContent) {
+    private void sendMail(String email, String subject, String htmlContent, String pdfName) {
         Properties props = new Properties()
         System.getenv()
                 .findAll { it.key.startsWith('mail.smtp.') }
@@ -84,7 +89,31 @@ class UserNotificationServiceImpl implements UserNotificationService {
         message.setFrom(new InternetAddress(from))
         message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(email))
         message.setSubject(subject)
-        message.setContent(htmlContent, "text/html")
+
+        if (pdfName) {
+            // include pdf
+
+            def out = new ByteArrayOutputStream()
+            ITextRenderer renderer = new ITextRenderer()
+            renderer.setDocumentFromString(htmlContent)
+            renderer.layout()
+            renderer.createPDF(out)
+
+            Multipart multipartMessage = new MimeMultipart()
+            message.setContent(multipartMessage, "multipart/mixed")
+
+            MimeBodyPart htmlPart = new MimeBodyPart()
+            htmlPart.setContent(htmlContent, "text/html")
+            multipartMessage.addBodyPart(htmlPart)
+
+            MimeBodyPart pdfPart = new MimeBodyPart()
+            pdfPart.setDataHandler(new DataHandler(new ByteArrayDataSource(
+                    out.toByteArray(), "application/pdf")))
+            pdfPart.setFileName(pdfName)
+            multipartMessage.addBodyPart(pdfPart)
+        } else {
+            message.setContent(htmlContent, "text/html")
+        }
 
         Transport.send(message)
 
