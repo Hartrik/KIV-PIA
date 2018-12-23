@@ -17,6 +17,7 @@ import javax.transaction.Transactional
 import java.time.ZonedDateTime
 
 /**
+ * Account manager implementation.
  *
  * @version 2018-12-23
  * @author Patrik Harag
@@ -68,11 +69,11 @@ class AccountManagerImpl implements AccountManager {
         }
 
         @Override
-        Account retrieveAccount(int id) {
+        Account findAccountById(int id) {
             def account = accountDao.findById(id)
                     .orElseThrow { new ObjectNotFoundException('Account not found') }
 
-            if (account.owner.id != currentUser.id) {
+            if (currentUser.role != User.ROLE_ADMIN && account.owner.id != currentUser.id) {
                 throw new AccessDeniedException("Cannot show other user's account")
             }
 
@@ -81,11 +82,19 @@ class AccountManagerImpl implements AccountManager {
 
         @Override
         List<Transaction> findAllTransactionsByAccount(Account account) {
+            if (currentUser.role != User.ROLE_ADMIN && account.owner.id != currentUser.id) {
+                throw new AccessDeniedException("Cannot show other user's accounts")
+            }
+
             transactionDao.findAllByAccount(account)
         }
 
         @Override
         List<Transaction> findAllTransactionsByAccount(Account account, ZonedDateTime from, ZonedDateTime to) {
+            if (currentUser.role != User.ROLE_ADMIN && account.owner.id != currentUser.id) {
+                throw new AccessDeniedException("Cannot show other user's accounts")
+            }
+
             transactionDao.findAllByAccount(account, from, to)
         }
 
@@ -99,15 +108,15 @@ class AccountManagerImpl implements AccountManager {
                 def receiverAccount = accountDao.findByAccountNumber(accountNumber)
                         .orElseThrow { new ObjectNotFoundException("Account not found: ${accountNumber}") }
 
-                performTransaction(sender, receiverAccount, amount, date, description)
+                performInHouseTransaction(sender, receiverAccount, amount, date, description)
             } else {
                 performInterBankTransaction(sender, receiver, amount, date, description)
             }
         }
 
         @Override
-        Transaction performTransaction(Account sender, Account receiver, BigDecimal amount,
-                                       ZonedDateTime date, String description) {
+        Transaction performInHouseTransaction(Account sender, Account receiver, BigDecimal amount,
+                                              ZonedDateTime date, String description) {
 
             def transaction = new Transaction(
                     date: date,
@@ -177,6 +186,9 @@ class AccountManagerImpl implements AccountManager {
 
             if (transaction.sender && transaction.sender.balance < transaction.amountSent)
                 throw new WrongInputException('Sender does not have enough money')
+
+            if (currentUser.role != User.ROLE_ADMIN && transaction.sender && transaction.sender.owner.id != currentUser.id)
+                throw new AccessDeniedException("Cannot send transaction from other user's account")
         }
 
         private Transaction perform(Transaction transaction, Account sender, Account receiver) {

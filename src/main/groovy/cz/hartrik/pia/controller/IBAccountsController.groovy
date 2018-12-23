@@ -78,7 +78,7 @@ class IBAccountsController {
 
         def user = userManager.retrieveCurrentUser()
         def account = accountManager.authorize(user) {
-            retrieveAccount(id)
+            findAccountById(id)
         }
 
         ControllerUtils.fillLayoutAttributes(model, user)
@@ -102,7 +102,7 @@ class IBAccountsController {
     String sendHandler(Model model, @PathVariable Integer id, @RequestParam(required = false) Integer template) {
         def user = userManager.retrieveCurrentUser()
         def account = accountManager.authorize(user) {
-            retrieveAccount(id)
+            findAccountById(id)
         }
 
         ControllerUtils.fillLayoutAttributes(model, user)
@@ -131,7 +131,7 @@ class IBAccountsController {
         TuringTestHelper.testRequest(turingTestService, transactionDraft)
 
         def user = userManager.retrieveCurrentUser()
-        def account = accountManager.authorize(user) { retrieveAccount(id) }
+        def account = accountManager.authorize(user) { findAccountById(id) }
         def amount = currencyConverter.convert(
                 transactionDraft.amount, transactionDraft.currency, account.currency)
 
@@ -157,7 +157,7 @@ class IBAccountsController {
 
         Account account = null
         def transactions = accountManager.authorize(user) {
-            account = retrieveAccount(id)
+            account = findAccountById(id)
             findAllTransactionsByAccount(account, dateFrom, dateTo)
         }
 

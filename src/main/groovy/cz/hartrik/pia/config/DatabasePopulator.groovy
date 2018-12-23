@@ -94,7 +94,7 @@ class DatabasePopulator {
         generateTransactions(manager, account2, account2Created, 720, 5, 128000 / 5, random)
 
         // transaction between these two accounts
-        manager.performTransaction(account1, account2, 105.50, now, 'Subscription payment')
+        manager.performInHouseTransaction(account1, account2, 105.50, now, 'Subscription payment')
     }
 
     private User findOrCreate(User newUser) {

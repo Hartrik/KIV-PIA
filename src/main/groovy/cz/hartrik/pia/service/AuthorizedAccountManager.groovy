@@ -5,12 +5,14 @@ import cz.hartrik.pia.model.Currency
 import cz.hartrik.pia.model.Transaction
 import cz.hartrik.pia.model.User
 
-import java.time.LocalDate
 import java.time.ZonedDateTime
 
 /**
+ * Authorized account manager.
  *
- * @version 2018-12-01
+ * @see AccountManager
+ *
+ * @version 2018-12-23
  * @author Patrik Harag
  */
 interface AuthorizedAccountManager {
@@ -30,13 +32,38 @@ interface AuthorizedAccountManager {
      * @param id
      * @return
      */
-    Account retrieveAccount(int id)
+    Account findAccountById(int id)
 
+    /**
+     * Returns all transactions for given account.
+     *
+     * @param account account
+     * @return transactions
+     */
     List<Transaction> findAllTransactionsByAccount(Account account)
+
+    /**
+     * Returns all transactions for given account and interval.
+     *
+     * @param account account
+     * @param startDate start date
+     * @param endDate end date
+     * @return transactions
+     */
     List<Transaction> findAllTransactionsByAccount(Account account, ZonedDateTime from, ZonedDateTime to)
 
+    /**
+     * Creates a new transaction. Decides whether in-house or interbank.
+     *
+     * @param sender sender
+     * @param receiver receiver
+     * @param amount money in receiver's currency, amount >= 0
+     * @param date date
+     * @param description description or null
+     * @return transaction
+     */
     Transaction performTransaction(Account sender, String receiver, BigDecimal amount,
-                                   ZonedDateTime date, String description);
+                                   ZonedDateTime date, String description)
 
     /**
      * Creates a new transaction.
@@ -48,8 +75,8 @@ interface AuthorizedAccountManager {
      * @param description description or null
      * @return transaction
      */
-    Transaction performTransaction(Account sender, Account receiver, BigDecimal amount,
-                                   ZonedDateTime date, String description)
+    Transaction performInHouseTransaction(Account sender, Account receiver, BigDecimal amount,
+                                          ZonedDateTime date, String description)
 
     /**
      * Creates a new transaction.
