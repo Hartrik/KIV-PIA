@@ -15,6 +15,7 @@ import javax.transaction.Transactional
 import java.util.function.Supplier
 
 /**
+ * User management implementation.
  *
  * @version 2018-12-22
  * @author Patrik Harag
@@ -57,7 +58,7 @@ class UserManagerImpl implements UserManager {
         }
 
         @Override
-        void remove(Integer id) {
+        User remove(Integer id) {
             if (currentUser.role != User.ROLE_ADMIN) {
                 throw new AccessDeniedException("Only admin can remove a user")
             }
@@ -68,16 +69,16 @@ class UserManagerImpl implements UserManager {
             }
 
             user.enabled = false
-            userDao.save(user)
+            return userDao.save(user)
         }
 
         @Override
-        void edit(Integer id, String firstName, String lastName, String personalNumber, String email) {
+        User edit(Integer id, String firstName, String lastName, String personalNumber, String email) {
             def user = userDao.findById(id).orElseThrow(USER_NOT_FOUND)
 
-            if (user.id != currentUser.id && currentUser.role == User.ROLE_CUSTOMER) {
+            if (currentUser.role != User.ROLE_ADMIN && user.id != currentUser.id) {
                 throw new AccessDeniedException("User cannot edit other user's account")
-            } else {
+            } else if (currentUser.id == user.id) {
                 // we want to update a cached user as well
                 user = currentUser
             }
@@ -86,11 +87,11 @@ class UserManagerImpl implements UserManager {
             user.lastName = lastName
             user.personalNumber = personalNumber
             user.email = email
-            userDao.save(user)
+            return userDao.save(user)
         }
 
         @Override
-        void create(String firstName, String lastName, String personalNumber, String email) {
+        User create(String firstName, String lastName, String personalNumber, String email) {
             if (currentUser.role != User.ROLE_ADMIN) {
                 throw new AccessDeniedException("Users are not allowed to create new accounts")
             }
@@ -116,11 +117,16 @@ class UserManagerImpl implements UserManager {
                 throw new RuntimeException(
                         "User has been created but email notification failed for reason: $e", e)
             }
+
+            return user
         }
 
         @Override
         List<User> findAllUsers() {
-            userDao.findAll()
+            if (currentUser.role != User.ROLE_ADMIN) {
+                throw new AccessDeniedException("Users are not allowed to see other accounts")
+            }
+            userDao.findAll().findAll { it.enabled }
         }
     }
 

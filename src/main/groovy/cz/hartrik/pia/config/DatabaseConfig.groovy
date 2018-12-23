@@ -16,13 +16,13 @@ import javax.sql.DataSource
 /**
  * Database configuration.
  *
- * @version 2018-11-17
+ * @version 2018-12-23
  * @author Patrik Harag
  */
 @Configuration
 class DatabaseConfig {
 
-    private static class Database {
+    protected static class Database {
         DataSource dataSource
         Dialect dialect
     }
@@ -31,24 +31,30 @@ class DatabaseConfig {
     Database database() throws URISyntaxException {
         String url = System.getenv("DATABASE_URL")
         if (url != null) {
-            DatabaseUrl db = DatabaseUrl.extract()
-            String jdbc = db.jdbcUrl()
-            String user = db.username()
-            String pass = db.password()
-            return new Database(
-                    dataSource: new DriverManagerDataSource("$jdbc?user=$user&password=$pass"),
-                    dialect: new PostgreSQL95Dialect()
-            )
-
+            return initPostgres()
         } else {
             // external db is not set
-            EmbeddedDatabaseBuilder builder = new EmbeddedDatabaseBuilder()
-            return new Database(
-                    dataSource: builder.setType(EmbeddedDatabaseType.DERBY).build(),
-                    dialect: new DerbyTenFiveDialect()
-            )
-
+            return initDerby()
         }
+    }
+
+    protected Database initDerby() {
+        EmbeddedDatabaseBuilder builder = new EmbeddedDatabaseBuilder()
+        return new Database(
+                dataSource: builder.setType(EmbeddedDatabaseType.DERBY).build(),
+                dialect: new DerbyTenFiveDialect()
+        )
+    }
+
+    protected Database initPostgres() {
+        DatabaseUrl db = DatabaseUrl.extract()
+        String jdbc = db.jdbcUrl()
+        String user = db.username()
+        String pass = db.password()
+        return new Database(
+                dataSource: new DriverManagerDataSource("$jdbc?user=$user&password=$pass"),
+                dialect: new PostgreSQL95Dialect()
+        )
     }
 
     @Bean

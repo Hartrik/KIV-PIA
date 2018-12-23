@@ -36,9 +36,9 @@ class AdministrationController {
         userManager.authorize(user) {
             def listOfUsers = findAllUsers()
             model.addAttribute("users",
-                    listOfUsers.findAll { it.enabled && it.role == User.ROLE_CUSTOMER })
+                    listOfUsers.findAll { it.role == User.ROLE_CUSTOMER })
             model.addAttribute("admins",
-                    listOfUsers.findAll { it.enabled && it.role == User.ROLE_ADMIN })
+                    listOfUsers.findAll { it.role == User.ROLE_ADMIN })
         }
         return "user-management"
     }
