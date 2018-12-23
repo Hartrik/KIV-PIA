@@ -3,13 +3,16 @@ package cz.hartrik.pia.controller
 import org.springframework.ui.Model
 
 /**
+ * Helper class for working with pagination.
  *
  * @version 2018-11-25
  * @author Patrik Harag
  */
 class PaginationHelper<T> {
 
+    /** Numbers of rows per page that can be selected by user. */
     final List<Integer> paginationValues
+    /** Default number of rows per page. */
     final int defaultPagination
 
     PaginationHelper(List<Integer> paginationValues, int defaultPagination) {

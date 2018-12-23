@@ -16,6 +16,12 @@ import org.springframework.stereotype.Repository
 @Repository
 interface TransactionTemplateDao extends JpaRepository<TransactionTemplate, Integer> {
 
+    /**
+     * Returns all templates created by given user.
+     *
+     * @param owner user
+     * @return templates
+     */
     @Query("SELECT t FROM TransactionTemplate t WHERE t.owner = :owner ORDER BY t.name")
     List<TransactionTemplate> findAllByOwner(@Param("owner") User owner)
 

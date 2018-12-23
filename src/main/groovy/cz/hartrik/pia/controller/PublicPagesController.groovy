@@ -7,7 +7,7 @@ import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.RequestMapping
 
 /**
- * Index controller.
+ * Controller for public pages.
  *
  * @version 2018-11-23
  * @author Patrik Harag

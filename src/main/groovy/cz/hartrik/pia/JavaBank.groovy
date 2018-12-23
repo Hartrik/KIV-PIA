@@ -1,12 +1,16 @@
 package cz.hartrik.pia
 
 /**
+ * Utility class.
  *
  * @version 2018-12-22
  * @author Patrik Harag
  */
 class JavaBank {
 
+    /**
+     * JavaBank code.
+     */
     static final String CODE = '1024'
 
     static String generateAccountNumber(Random random) {

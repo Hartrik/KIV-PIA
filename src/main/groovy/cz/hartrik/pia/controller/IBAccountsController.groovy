@@ -23,6 +23,7 @@ import java.time.ZonedDateTime
 
 /**
  * Internet banking pages controller.
+ * Contains handlers for pages related to accounts and transactions.
  *
  * @version 2018-12-23
  * @author Patrik Harag

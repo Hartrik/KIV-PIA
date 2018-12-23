@@ -13,6 +13,12 @@ import org.springframework.stereotype.Repository
 @Repository
 interface AccountDao extends JpaRepository<Account, Integer> {
 
+    /**
+     * Returns account by its number.
+     *
+     * @param accountNumber account number
+     * @return account
+     */
     Optional<Account> findByAccountNumber(String accountNumber)
 
 }

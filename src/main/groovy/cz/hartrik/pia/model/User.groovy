@@ -9,6 +9,7 @@ import org.springframework.security.core.userdetails.UserDetails
 import javax.persistence.*
 
 /**
+ * User entity.
  *
  * @version 2018-11-25
  * @author Patrik Harag
@@ -17,7 +18,7 @@ import javax.persistence.*
 @ToString(excludes = 'accounts')
 @Entity
 @Table(name = 'table_user')
-class User implements UserDetails, DataTransferObject<Integer> {
+class User implements UserDetails, EntityObject<Integer> {
 
     static final String ROLE_CUSTOMER = 'CUSTOMER'
     static final String ROLE_ADMIN = 'ADMIN'
@@ -28,27 +29,58 @@ class User implements UserDetails, DataTransferObject<Integer> {
     @Column(nullable = false)
     Integer id
 
+    /**
+     * User enabled.
+     */
     @Column(nullable = false)
     Boolean enabled = true
 
+    /**
+     * User role.
+     */
     @Column(nullable = false)
     String role
 
+    /**
+     * User's first name.
+     */
     @Column(nullable = false)
     String firstName
+
+    /**
+     * User's last name.
+     */
     @Column(nullable = false)
     String lastName
+
+    /**
+     * User's personal number.
+     */
     @Column(nullable = false)
     String personalNumber
+
+    /**
+     * User's email.
+     */
     @Column(nullable = false)
     String email
 
+    /**
+     * User's login.
+     */
     @Column(nullable = false, unique = true)
-    String login  // code
-    @Column(nullable = false)
-    String password   // password
+    String login
 
-    @OneToMany(mappedBy = 'owner', fetch = FetchType.EAGER /* they are listed in the menu */)
+    /**
+     * User's password (hash).
+     */
+    @Column(nullable = false)
+    String password
+
+    /**
+     * Accounts created by the user.
+     */
+    @OneToMany(mappedBy = 'owner', fetch = FetchType.EAGER /* they are listed in the menu (on each page) */)
     Set<Account> accounts
 
     // UserDetails

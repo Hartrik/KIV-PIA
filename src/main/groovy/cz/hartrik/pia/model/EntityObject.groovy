@@ -1,12 +1,12 @@
 package cz.hartrik.pia.model
 
 /**
- * Base interface for all data transfer objects.
+ * Base interface for all model objects.
  *
- * @version 2018-11-17
+ * @version 2018-12-23
  * @author Patrik Harag
  */
-interface DataTransferObject<PK extends Serializable> {
+interface EntityObject<PK extends Serializable> {
 
     /**
      * Object id.

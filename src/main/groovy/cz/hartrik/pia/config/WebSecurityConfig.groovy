@@ -10,6 +10,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
 
 /**
+ * Spring Security configuration.
+ *
  * @author Patrik Harag
  * @version 2018-12-21
  */

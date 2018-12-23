@@ -4,6 +4,7 @@ import cz.hartrik.pia.WrongInputException
 import cz.hartrik.pia.service.TuringTestService
 
 /**
+ * Helper class for working with turing test.
  *
  * @version 2018-12-22
  * @author Patrik Harag

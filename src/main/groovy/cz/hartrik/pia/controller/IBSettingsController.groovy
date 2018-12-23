@@ -12,7 +12,8 @@ import org.springframework.web.bind.annotation.RequestParam
 import javax.servlet.http.HttpServletRequest
 
 /**
- * Settings pages controller.
+ * Internet banking pages controller.
+ * Contains handlers for pages related to settings.
  *
  * @version 2018-11-26
  * @author Patrik Harag

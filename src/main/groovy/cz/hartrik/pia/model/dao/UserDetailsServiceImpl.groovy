@@ -8,6 +8,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.stereotype.Repository
 
 /**
+ * Spring Security {@link UserDetailsService} implementation.
  *
  * @version 2018-11-22
  * @author Patrik Harag
@@ -17,7 +18,7 @@ import org.springframework.stereotype.Repository
 class UserDetailsServiceImpl implements UserDetailsService {
 
     @Autowired
-    UserDao userDao
+    private UserDao userDao
 
     @Override
     UserDetails loadUserByUsername(String login) throws UsernameNotFoundException {

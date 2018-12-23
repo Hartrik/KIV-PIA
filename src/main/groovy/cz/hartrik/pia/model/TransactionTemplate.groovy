@@ -13,6 +13,7 @@ import javax.persistence.ManyToOne
 import javax.persistence.Table
 
 /**
+ * Transaction template entity.
  *
  * @version 2018-12-22
  * @author Patrik Harag
@@ -21,7 +22,7 @@ import javax.persistence.Table
 @ToString(excludes = 'owner')
 @Entity
 @Table(name = 'table_transaction_template')
-class TransactionTemplate implements DataTransferObject<Integer> {
+class TransactionTemplate implements EntityObject<Integer> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -41,10 +42,15 @@ class TransactionTemplate implements DataTransferObject<Integer> {
     @Column(nullable = false)
     String name
 
+    /** Amount in given currency. */
     BigDecimal amount
+    /** Currency. */
     Currency currency
+    /** Account number (without bank code). */
     String accountNumber
+    /** Bank code. */
     String bankCode
+    /** Transaction description/note. */
     String description
 
 }

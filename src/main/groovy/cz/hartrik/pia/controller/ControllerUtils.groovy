@@ -11,6 +11,7 @@ import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
 /**
+ * Utility class.
  *
  * @version 2018-12-23
  * @author Patrik Harag

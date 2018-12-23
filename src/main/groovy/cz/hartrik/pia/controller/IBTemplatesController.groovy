@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletRequest
 
 /**
  * Internet banking pages controller.
+ * Contains handlers for pages related to templates.
  *
  * @version 2018-12-22
  * @author Patrik Harag

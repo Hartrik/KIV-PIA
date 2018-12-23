@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Configuration
 import javax.annotation.PostConstruct
 
 /**
+ * Populates {@link TuringTestService} with data.
  *
  * @version 2018-11-25
  * @author Patrik Harag
@@ -15,7 +16,7 @@ import javax.annotation.PostConstruct
 class TuringTestPopulator {
 
     @Autowired
-    TuringTestService turingTestService
+    private TuringTestService turingTestService
 
     @PostConstruct
     void populate() {

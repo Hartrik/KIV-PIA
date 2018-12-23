@@ -8,6 +8,7 @@ import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
 /**
+ * Transaction entity.
  *
  * @version 2018-11-24
  * @author Patrik Harag
@@ -16,7 +17,7 @@ import java.time.format.DateTimeFormatter
 @ToString
 @Entity
 @Table(name = 'table_transaction')
-class Transaction implements DataTransferObject<Integer> {
+class Transaction implements EntityObject<Integer> {
 
     private static def ISO_8601_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")
 
@@ -61,15 +62,26 @@ class Transaction implements DataTransferObject<Integer> {
     @Column(nullable = false)
     String receiverAccountNumber
 
+    /**
+     * Date when transaction has been performed.
+     */
     @Basic
     @Column(nullable = false)
     ZonedDateTime date
 
+    /**
+     * Returns date formatted as ISO 8601.
+     *
+     * @return formatted date
+     */
     @Transient
     String getDateAsIso8601() {
         date.format(ISO_8601_FORMATTER)
     }
 
+    /**
+     * Description/node.
+     */
     String description
 
 }

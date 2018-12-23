@@ -18,6 +18,7 @@ import javax.transaction.Transactional
 import java.time.ZonedDateTime
 
 /**
+ * Populates DB with sample data.
  *
  * @version 2018-12-23
  * @author Patrik Harag
@@ -28,16 +29,16 @@ class DatabasePopulator {
     public static final String ENABLE = "SAMPLE_DATA_GENERATION"
 
     @Autowired
-    UserDao userDao
+    private UserDao userDao
 
     @Autowired
-    AccountManager accountManager
+    private AccountManager accountManager
 
     @Autowired
-    TemplateManager templateManager
+    private TemplateManager templateManager
 
     @Autowired
-    PasswordEncoder encoder
+    private PasswordEncoder encoder
 
     @PostConstruct
     @Transactional

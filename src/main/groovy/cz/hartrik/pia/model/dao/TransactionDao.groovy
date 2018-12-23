@@ -18,6 +18,12 @@ import java.time.ZonedDateTime
 @Repository
 interface TransactionDao extends JpaRepository<Transaction, Integer> {
 
+    /**
+     * Returns all transactions for given account.
+     *
+     * @param account account
+     * @return transactions
+     */
     @Query("""
         SELECT t FROM Transaction t
         WHERE t.sender = :account OR t.receiver = :account
@@ -25,6 +31,14 @@ interface TransactionDao extends JpaRepository<Transaction, Integer> {
     """)
     List<Transaction> findAllByAccount(@Param("account") Account account)
 
+    /**
+     * Returns all transactions for given account and interval.
+     *
+     * @param account account
+     * @param startDate start date
+     * @param endDate end date
+     * @return transactions
+     */
     @Query("""
         SELECT t FROM Transaction t
         WHERE
