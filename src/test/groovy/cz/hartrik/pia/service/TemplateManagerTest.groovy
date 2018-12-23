@@ -101,14 +101,14 @@ class TemplateManagerTest {
 
     @Test
     void testFindAll() {
-        def templates = templateManager.authorize(testData.user1, {
-            createTemplate(testData.user1, "template6", null, Currency.USD, null, null, null)
-            findAllTemplatesByOwner(testData.user1)
+        templateManager.authorize(testData.user1, {
+            def template = createTemplate(testData.user1, "template6", null, Currency.USD, null, null, null)
+            def templates = findAllTemplatesByOwner(testData.user1)
+
+            def t = templates.find { it.name == template.name }
+            assert t.currency == Currency.USD
+            assert t.amount == null
         })
-        assert templates.size() == 1
-        assert templates.first().name == 'template6'
-        assert templates.first().currency == Currency.USD
-        assert templates.first().amount == null
     }
 
     @Test(expected = AccessDeniedException)

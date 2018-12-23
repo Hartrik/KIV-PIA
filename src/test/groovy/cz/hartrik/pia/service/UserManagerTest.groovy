@@ -33,7 +33,6 @@ class UserManagerTest {
         def users = userManager.authorize(testData.admin, {
             findAllUsers()
         })
-        assert users.size() == 3
         assert users.containsAll([testData.admin, testData.user1, testData.user2])
     }
 
