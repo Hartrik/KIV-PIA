@@ -46,6 +46,9 @@ class UserNotificationServiceImpl implements UserNotificationService {
                 transactions: transactions,
                 from: from,
                 to: to,
+                turnover: transactions.inject(BigDecimal.ZERO, {
+                    a, b -> a + (b.sender?.id == account.id ? b.amountSent : b.amountReceived)
+                }),
                 change: transactions.inject(BigDecimal.ZERO, {
                     a, b -> a + (b.sender?.id == account.id ? -b.amountSent : b.amountReceived)
                 })

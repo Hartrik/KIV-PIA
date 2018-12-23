@@ -34,6 +34,7 @@
 <h2>Transactions</h2>
 <p>
   <strong>Interval:</strong> ${from} - ${to}<br>
+  <strong>Turnover:</strong> ${turnover}<br>
   <strong>Change:</strong> <span class="<#if change lt 0>amount-dec<#else>amount-inc</#if>">${change}</span>
 </p>
 
