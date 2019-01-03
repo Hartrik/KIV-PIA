@@ -23,7 +23,7 @@ import java.time.ZonedDateTime
 
 /**
  *
- * @version 2018-12-23
+ * @version 2018-12-29
  * @author Patrik Harag
  */
 @Service
@@ -66,9 +66,9 @@ class UserNotificationServiceImpl implements UserNotificationService {
     private void sendMail(String email, String subject, String htmlContent, String pdfName) {
         Properties props = new Properties()
         System.getenv()
-                .findAll { it.key.startsWith('mail.smtp.') }
-                .findAll { !it.key.endsWithAny('.user', ".pass") }
-                .each { props.put(it.key, it.value) }
+                .findAll { it.key.startsWith('mail_smtp_') }
+                .findAll { !it.key.endsWithAny('_user', "_pass") }
+                .each { props.put(it.key.replace('_', '.'), it.value) }
 
         if (props.isEmpty()) {
             LOGGER.error('SMTP server not configured!')
@@ -76,8 +76,8 @@ class UserNotificationServiceImpl implements UserNotificationService {
         }
         LOGGER.info("Sending email to $email, config: $props")
 
-        def from = System.getenv("mail.smtp.user")
-        def pass = System.getenv("mail.smtp.pass")
+        def from = System.getenv("mail_smtp_user")
+        def pass = System.getenv("mail_smtp_pass")
 
         Session session = Session.getDefaultInstance(props, new Authenticator() {
             protected PasswordAuthentication getPasswordAuthentication() {
