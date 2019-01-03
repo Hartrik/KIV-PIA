@@ -62,7 +62,7 @@ class DatabasePopulator {
                 role: User.ROLE_CUSTOMER,
                 login: 'User0002', password: encoder.encode('0002')))
 
-        if (!user1.accounts && !user2.accounts) {
+        if (!hasAccounts(user1) && !hasAccounts(user2)) {
             // we want these as separate transactions because of createAccount
             def account1 = accountManager.authorize(admin) { createAccount(Currency.CZK, user1) }
             def account2 = accountManager.authorize(admin) { createAccount(Currency.CZK, user2) }
@@ -74,6 +74,10 @@ class DatabasePopulator {
                 generateTemplates(delegate, user1, account1, user2, account2)
             }
         }
+    }
+
+    private boolean hasAccounts(User user) {
+        !accountManager.authorize(user, { findAllAccountsByOwner(user) }).isEmpty()
     }
 
     def generateTransactionsForAccounts(AuthorizedAccountManager manager, Account account1, Account account2) {
