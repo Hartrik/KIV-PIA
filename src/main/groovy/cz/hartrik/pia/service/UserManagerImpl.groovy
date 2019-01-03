@@ -17,7 +17,7 @@ import java.util.function.Supplier
 /**
  * User management implementation.
  *
- * @version 2018-12-22
+ * @version 2019-01-03
  * @author Patrik Harag
  */
 @Transactional
@@ -50,6 +50,8 @@ class UserManagerImpl implements UserManager {
     }
 
     private class AuthorizedUserManagerImpl implements AuthorizedUserManager {
+
+        private static final int GENERATE_LOGIN_ATTEMPTS = (int) Math.pow(10, JavaBank.LOGIN_SIZE)
 
         private final User currentUser
 
@@ -107,7 +109,7 @@ class UserManagerImpl implements UserManager {
                     lastName: lastName,
                     personalNumber: personalNumber,
                     email: email,
-                    login: String.format("User%04d", userDao.count()),
+                    login: generateLogin(new Random()),
                     password: encoder.encode(rawPassword)
             ))
 
@@ -119,6 +121,17 @@ class UserManagerImpl implements UserManager {
             }
 
             return user
+        }
+
+        private String generateLogin(Random random) {
+            for (int i = 0; i < GENERATE_LOGIN_ATTEMPTS; i++) {
+                def login = JavaBank.generateRandomLogin(random)
+
+                if (!userDao.findByLogin(login)) {
+                    return login
+                }
+            }
+            throw new RuntimeException("")
         }
 
         @Override
