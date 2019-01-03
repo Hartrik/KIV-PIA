@@ -1,7 +1,6 @@
 package cz.hartrik.pia.service
 
 import cz.hartrik.pia.model.Account
-import cz.hartrik.pia.model.Transaction
 import cz.hartrik.pia.model.User
 import freemarker.template.Configuration
 import freemarker.template.Template
@@ -23,7 +22,7 @@ import java.time.ZonedDateTime
 
 /**
  *
- * @version 2018-12-29
+ * @version 2019-01-03
  * @author Patrik Harag
  */
 @Service
@@ -33,6 +32,9 @@ class UserNotificationServiceImpl implements UserNotificationService {
 
     @Autowired
     private FreeMarkerConfig freeMarkerConfig
+
+    @Autowired
+    private AccountManager accountManager
 
     @Override
     void sendWelcome(User newUser, String rawPassword) {
@@ -46,11 +48,17 @@ class UserNotificationServiceImpl implements UserNotificationService {
     }
 
     @Override
-    void sendStatement(User user, Account account, List<Transaction> transactions, ZonedDateTime from, ZonedDateTime to) {
+    void sendStatement(User user, int accountId, ZonedDateTime dateFrom, ZonedDateTime dateTo) {
+        Account account = null
+        def transactions = accountManager.authorize(user) {
+            account = findAccountById(accountId)
+            findAllTransactionsByAccount(account, dateFrom, dateTo)
+        }
+
         def properties = user.properties + account.properties + [
                 transactions: transactions,
-                from: from,
-                to: to,
+                from: dateFrom,
+                to: dateTo,
                 turnover: transactions.inject(BigDecimal.ZERO, {
                     a, b -> a + (b.sender?.id == account.id ? b.amountSent : b.amountReceived)
                 }),

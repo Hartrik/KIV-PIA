@@ -1,7 +1,5 @@
 package cz.hartrik.pia.config
 
-import cz.hartrik.pia.model.Account
-import cz.hartrik.pia.model.Transaction
 import cz.hartrik.pia.model.User
 import cz.hartrik.pia.service.UserNotificationService
 import org.springframework.stereotype.Service
@@ -21,9 +19,7 @@ class UserNotificationServiceStub implements UserNotificationService {
     }
 
     @Override
-    void sendStatement(User user, Account account, List<Transaction> transactions,
-                       ZonedDateTime from, ZonedDateTime to) {
-
+    void sendStatement(User user, int accountId, ZonedDateTime from, ZonedDateTime to) {
         throw new UnsupportedOperationException()
     }
 

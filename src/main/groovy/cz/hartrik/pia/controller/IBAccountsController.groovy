@@ -1,7 +1,6 @@
 package cz.hartrik.pia.controller
 
 import cz.hartrik.pia.WrongInputException
-import cz.hartrik.pia.model.Account
 import cz.hartrik.pia.model.Currency
 import cz.hartrik.pia.controller.dto.TransactionDraft
 import cz.hartrik.pia.service.AccountManager
@@ -27,7 +26,7 @@ import java.time.ZonedDateTime
  * Internet banking pages controller.
  * Contains handlers for pages related to accounts and transactions.
  *
- * @version 2018-12-23
+ * @version 2019-01-03
  * @author Patrik Harag
  */
 @Controller
@@ -163,13 +162,7 @@ class IBAccountsController {
         def dateFrom = ControllerUtils.parseDate(dateFromRaw)
         def dateTo = ControllerUtils.parseDate(dateToRaw).plusDays(1).minusSeconds(1)
 
-        Account account = null
-        def transactions = accountManager.authorize(user) {
-            account = findAccountById(id)
-            findAllTransactionsByAccount(account, dateFrom, dateTo)
-        }
-
-        notificationService.sendStatement(user, account, transactions, dateFrom, dateTo)
+        notificationService.sendStatement(user, id, dateFrom, dateTo)
 
         return ControllerUtils.redirect(request, "/ib/account/${id}")
     }
