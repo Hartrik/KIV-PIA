@@ -3,7 +3,7 @@ package cz.hartrik.pia
 /**
  * Wrong input exception (3xx).
  *
- * @version 2018-11-17
+ * @version 2019-01-03
  * @author Patrik Harag
  */
 class WrongInputException extends RuntimeException {
@@ -12,4 +12,8 @@ class WrongInputException extends RuntimeException {
         super(message)
     }
 
+    @Override
+    String toString() {
+        return "Bad request: " + message
+    }
 }
