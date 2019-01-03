@@ -11,7 +11,7 @@ import javax.persistence.*
 /**
  * User entity.
  *
- * @version 2018-11-25
+ * @version 2019-01-03
  * @author Patrik Harag
  */
 @EqualsAndHashCode(excludes = 'accounts')
@@ -80,7 +80,7 @@ class User implements UserDetails, EntityObject<Integer> {
     /**
      * Accounts created by the user.
      */
-    @OneToMany(mappedBy = 'owner', fetch = FetchType.EAGER /* they are listed in the menu (on each page) */)
+    @OneToMany(mappedBy = 'owner')
     Set<Account> accounts
 
     // UserDetails

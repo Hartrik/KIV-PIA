@@ -2,6 +2,7 @@ package cz.hartrik.pia.controller
 
 import cz.hartrik.pia.WrongInputException
 import cz.hartrik.pia.model.User
+import cz.hartrik.pia.service.AccountManager
 import org.springframework.ui.Model
 
 import javax.servlet.http.HttpServletRequest
@@ -13,15 +14,20 @@ import java.time.format.DateTimeFormatter
 /**
  * Utility class.
  *
- * @version 2018-12-23
+ * @version 2019-01-03
  * @author Patrik Harag
  */
 class ControllerUtils {
 
     private static def ISO_8601_DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd")
 
-    static void fillLayoutAttributes(Model model, User currentUser) {
+    static void fillLayoutAttributes(Model model, User currentUser, AccountManager accountManager) {
         model.addAttribute("user", currentUser)
+        if (currentUser && currentUser.role == User.ROLE_CUSTOMER) {
+            model.addAttribute('accounts', accountManager.authorize(currentUser, {
+                findAllAccountsByOwner(currentUser)
+            }))
+        }
     }
 
     static String redirectBack(HttpServletRequest request) {

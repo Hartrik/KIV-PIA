@@ -12,7 +12,7 @@ import java.time.ZonedDateTime
  *
  * @see AccountManager
  *
- * @version 2018-12-23
+ * @version 2019-01-03
  * @author Patrik Harag
  */
 interface AuthorizedAccountManager {
@@ -33,6 +33,14 @@ interface AuthorizedAccountManager {
      * @return
      */
     Account findAccountById(int id)
+
+    /**
+     * Finds all accounts for given user.
+     *
+     * @param user owner
+     * @return accounts
+     */
+    List<Account> findAllAccountsByOwner(User user)
 
     /**
      * Returns all transactions for given account.

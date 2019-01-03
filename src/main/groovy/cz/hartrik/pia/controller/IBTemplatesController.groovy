@@ -2,6 +2,7 @@ package cz.hartrik.pia.controller
 
 import cz.hartrik.pia.model.Currency
 import cz.hartrik.pia.model.TransactionTemplate
+import cz.hartrik.pia.service.AccountManager
 import cz.hartrik.pia.service.TemplateManager
 import cz.hartrik.pia.service.UserManager
 import org.springframework.beans.factory.annotation.Autowired
@@ -30,10 +31,13 @@ class IBTemplatesController {
     @Autowired
     private TemplateManager templateManager
 
+    @Autowired
+    private AccountManager accountManager
+
     @RequestMapping("templates-overview")
     String templatesOverviewHandler(Model model) {
         def user = userManager.retrieveCurrentUser()
-        ControllerUtils.fillLayoutAttributes(model, user)
+        ControllerUtils.fillLayoutAttributes(model, user, accountManager)
         model.addAttribute('currencies', Currency.values()*.name())
         model.addAttribute('templates', templateManager.authorize(user, {
             findAllTemplatesByOwner(user)
@@ -63,7 +67,7 @@ class IBTemplatesController {
     @RequestMapping("template/{id}")
     String templateHandler(Model model, @PathVariable Integer id) {
         def user = userManager.retrieveCurrentUser()
-        ControllerUtils.fillLayoutAttributes(model, user)
+        ControllerUtils.fillLayoutAttributes(model, user, accountManager)
         model.addAttribute('currencies', Currency.values()*.name())
         model.addAttribute('template', templateManager.authorize(user, {
             findById(id)

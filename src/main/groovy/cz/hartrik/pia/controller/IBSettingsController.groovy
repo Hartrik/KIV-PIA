@@ -1,5 +1,6 @@
 package cz.hartrik.pia.controller
 
+import cz.hartrik.pia.service.AccountManager
 import cz.hartrik.pia.service.UserManager
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Controller
@@ -15,7 +16,7 @@ import javax.servlet.http.HttpServletRequest
  * Internet banking pages controller.
  * Contains handlers for pages related to settings.
  *
- * @version 2018-11-26
+ * @version 2019-01-03
  * @author Patrik Harag
  */
 @Controller
@@ -25,10 +26,13 @@ class IBSettingsController {
     @Autowired
     private UserManager userManager
 
+    @Autowired
+    private AccountManager accountManager
+
     @RequestMapping("settings")
     String editUserHandler(Model model) {
         def user = userManager.retrieveCurrentUser()
-        ControllerUtils.fillLayoutAttributes(model, user)
+        ControllerUtils.fillLayoutAttributes(model, user, accountManager)
         model.addAttribute("default", user)
         return "settings"
     }

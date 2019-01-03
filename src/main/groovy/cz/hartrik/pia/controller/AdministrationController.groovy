@@ -3,6 +3,7 @@ package cz.hartrik.pia.controller
 import cz.hartrik.pia.WrongInputException
 import cz.hartrik.pia.controller.dto.UserDraft
 import cz.hartrik.pia.model.User
+import cz.hartrik.pia.service.AccountManager
 import cz.hartrik.pia.service.TuringTestService
 import cz.hartrik.pia.service.UserManager
 import org.springframework.beans.factory.annotation.Autowired
@@ -18,7 +19,7 @@ import javax.servlet.http.HttpServletRequest
 /**
  * Administration pages controller.
  *
- * @version 2018-12-23
+ * @version 2019-01-03
  * @author Patrik Harag
  */
 @Controller
@@ -31,10 +32,13 @@ class AdministrationController {
     @Autowired
     private TuringTestService turingTestService
 
+    @Autowired
+    private AccountManager accountManager
+
     @RequestMapping("user-management")
     String userManagementHandler(Model model) {
         def user = userManager.retrieveCurrentUser()
-        ControllerUtils.fillLayoutAttributes(model, user)
+        ControllerUtils.fillLayoutAttributes(model, user, accountManager)
         userManager.authorize(user) {
             def listOfUsers = findAllUsers()
             model.addAttribute("users",
@@ -48,7 +52,7 @@ class AdministrationController {
     @RequestMapping("create-user")
     String createUserHandler(Model model) {
         def user = userManager.retrieveCurrentUser()
-        ControllerUtils.fillLayoutAttributes(model, user)
+        ControllerUtils.fillLayoutAttributes(model, user, accountManager)
         model.addAttribute('turing_test', turingTestService.randomTest())
         return "create-user"
     }

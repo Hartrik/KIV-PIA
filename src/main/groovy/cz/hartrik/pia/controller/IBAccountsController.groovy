@@ -56,9 +56,8 @@ class IBAccountsController {
     @RequestMapping("accounts-overview")
     String accountsOverviewHandler(Model model) {
         def user = userManager.retrieveCurrentUser()
-        ControllerUtils.fillLayoutAttributes(model, user)
+        ControllerUtils.fillLayoutAttributes(model, user, accountManager)
         model.addAttribute('currencies', Currency.values()*.name())
-        model.addAttribute('accounts', user.accounts)
         return "accounts-overview"
     }
 
@@ -82,7 +81,7 @@ class IBAccountsController {
             findAccountById(id)
         }
 
-        ControllerUtils.fillLayoutAttributes(model, user)
+        ControllerUtils.fillLayoutAttributes(model, user, accountManager)
         model.addAttribute('account', account)
 
         // fill default form input values
@@ -106,7 +105,7 @@ class IBAccountsController {
             findAccountById(id)
         }
 
-        ControllerUtils.fillLayoutAttributes(model, user)
+        ControllerUtils.fillLayoutAttributes(model, user, accountManager)
         model.addAttribute('account', account)
         model.addAttribute('currencies', Currency.values()*.name())
         model.addAttribute('turing_test', turingTestService.randomTest())

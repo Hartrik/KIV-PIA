@@ -11,7 +11,7 @@
     <table class="table table-striped">
       <thead>
         <tr>
-          <th>#</th><th>Name</th><th>E-mail</th><th>Accounts</th><th></th></tr>
+          <th>#</th><th>Name</th><th>E-mail</th><th></th></tr>
       </thead>
       <tbody>
         <#list users as u>
@@ -19,13 +19,6 @@
           <td class="col-content">${u.id}</td>
           <td class="col-content">${u.firstName} ${u.lastName}</td>
           <td class="col-content"><a href="mailto:${u.email}">${u.email}</td>
-          <td class="col-content">
-            <#list u.accounts as account>
-            ${account.accountNumberFull}<br>
-            <#else>
-            --
-            </#list>
-          </td>
           <td class="col-action">
             <a href="#" class="btn btn-danger btn-xs"
                data-href="/service/user/${u.id}/remove/action"

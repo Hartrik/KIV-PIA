@@ -82,7 +82,7 @@
             <h4>Logged <small style="white-space: nowrap">(${user.firstName} ${user.lastName})</small></h4>
             <div class="list-group">
               <a href="/ib/accounts-overview" class="list-group-item">Accounts</a>
-              <#list user.accounts as account>
+              <#list accounts as account>
               <a href="/ib/account/${account.id}" class="list-group-item nested-group-item">${account.accountNumberFull}</a>
               </#list>
               <a href="/ib/settings" class="list-group-item">Settings</a>

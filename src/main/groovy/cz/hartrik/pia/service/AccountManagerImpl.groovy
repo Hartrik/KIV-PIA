@@ -19,7 +19,7 @@ import java.time.ZonedDateTime
 /**
  * Account manager implementation.
  *
- * @version 2018-12-23
+ * @version 2019-01-03
  * @author Patrik Harag
  */
 @Transactional
@@ -78,6 +78,15 @@ class AccountManagerImpl implements AccountManager {
             }
 
             return account
+        }
+
+        @Override
+        List<Account> findAllAccountsByOwner(User user) {
+            if (currentUser.role != User.ROLE_ADMIN && user.id != currentUser.id) {
+                throw new AccessDeniedException("Cannot show other user's accounts")
+            }
+
+            accountDao.findAllByOwner(user)
         }
 
         @Override
